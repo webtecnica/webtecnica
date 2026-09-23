@@ -60,3 +60,10 @@
   `webtecnica`, `Closes #1478` sem crases (`closingIssuesReferences=[1478]`), CI na conferência:
   3 pass / 12 pending / 0 fail. Delta: deskcomm abertos 2 (#1482+#1486), merged 125; agent 434 /
   webui 126 sem mudança. Watchdog detectou o push (state=`9cb9dba`) com alvo telegram corrigido.
+
+### Onda de 4 CRs webui: economia medida + 2 incidentes + reconciliacao VPS x PC
+- Economia (medida, state.db): onda inteira (semente + 4 filhos, 124 calls) = $0,094; os 3 CRs da 1a leva = ~$0,05 com review respondido, sabotagem e evidencia. Cache 6,63M vs 299K frios = 22x (-90,6% vs conta fria de $1,004). Gates do Jev (5 seeds) ~ $0,00014.
+- Prefixo de subagente no MiMo medido = 15,7K tokens (nao 685K — era da era DeepSeek): cold start custa $0,002, nao $0,19. Warm-up no MiMo e seguro de latencia e de prefixo entre filhos, nao alavanca de $ (skill subagent-warmup-recovery ja corrigida).
+- Incidente 1 (timeout): filho do #7098 preso 420s+ num pytest --collect-only -> timeout 2700s com diff parcial nao commitado; arremate despachado COM o estado medido no brief.
+- Incidente 2 (filtro de seguranca da Xiaomi): arremate barrado com "high risk" ao redigir o RESUMO FINAL — mas commit (ccb23d1d), push e comentario no PR ja estavam feitos. Mensagem de "failed" nao e trabalho perdido: medir o disco/remote antes de reagir (state-in-git pagou 100%). Regra mantida: reportar, NUNCA trocar filho de modelo/provider.
+- Reconciliacao VPS x PC (o ledger expoz em tempo real): o Antigravity rodou lote de 8 PRs webui em paralelo; #7647 = colaboracao provada por ancestry (nosso 5c1b1dea e ancestral do i18n d2ecf3d7 dele — findings 1+2 nossos, finding 4 dele); #7651/#7743 = heads nossos apesar do LOG dele reivindicar — ACOES.md existe justamente para separar feito x declarado.
