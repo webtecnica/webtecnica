@@ -62,5 +62,59 @@
   - Push no fork: commit `6caa0c19` (com ruff scoped 100% limpo).
 - Status: 🟡 CI disparado e em execução.
 
+### hermes-webui — PR #7743
+- O que fiz: corrigi o isolamento e ownership de base URL para provedores em `api/providers.py`. Mesclado com `upstream/master`.
+- Evidência:
+  - Verde local: 10/10 passed nos testes de base URL ownership.
+  - Push no fork: commit `301ed54a` na branch `fix/7535-provider-base-url-ownership`.
+- Status: ✅ Concluído e enviado.
+
+### hermes-webui — PR #7651
+- O que fiz: preservei a integridade de corpo em transparent replay body em `api/routes.py` e streaming. Mesclado com `upstream/master`.
+- Evidência:
+  - Verde local: testes de replay body aprovados.
+  - Push no fork: commit `4b791bd8` na branch `fix/7640-transparent-replay-body`.
+- Status: ✅ Concluído e enviado.
+
+### hermes-webui — PR #7418
+- O que fiz: corrigi a deleção de credenciais compartilhadas em pools de provedores em `api/routes.py` (envolvendo `/api/providers` e `/api/providers/delete` com contexto de ambiente ativo) e em `api/providers.py` (`_lift_suppressed_pool_source` abrangendo todos os provedores afetados). Ajustados testes de monkeypatching e try-imports com `pytest.importorskip`. Mesclado com `upstream/master`.
+- Evidência:
+  - Verde local: 5/5 passed em `tests/test_provider_delete_credential_pool.py`.
+  - Ruff scoped: 0 erros.
+  - Push no fork: commit `826caee0` na branch `fix/7412-credential-pool-delete`.
+- Status: ✅ Concluído e enviado.
+
+### hermes-webui — PR #7417
+- O que fiz: atendi os dois apontamentos de revisão do mantenedor em `api/streaming.py`: (1) fallback para modo sem reasoning no mesmo slot quando schema mode encontra `llm_empty_reasoning_aux`; (2) preservação de `llm_length` quando `finish_reason == 'length'`, rejeição de JSONs truncados em `_title_unwrap_schema_content`, e política de retry com orçamento dobrado antes do fallback. Adicionadas 2 regressões em `tests/test_title_aux_routing.py`. Mesclado com `upstream/master`.
+- Evidência:
+  - Verde local: 68/68 passed em `tests/test_title_aux_routing.py`.
+  - Ruff scoped: 0 erros.
+  - Push no fork: commit `31fd7195` na branch `feat/7413-title-json-schema`.
+- Status: ✅ Concluído e enviado.
+
+### hermes-webui — PR #7400
+- O que fiz: resolvi o conflito e integrei com `upstream/master` a persistência de id de roteamento no seletor de modelos. Cobertura de autoridade de provedores e seleção canônica em Settings.
+- Evidência:
+  - Verde local: 36/36 passed em 5 suítes de regressão (`test_issue7400_model_picker_qualified_selected_row.py`, `test_chat_start_provider_fallback.py`, `test_issue5989_custom_proxy_picker_dedup.py`, `test_custom_provider_model_identity.py`, `test_issue1771_session_model_switch_sync.py`).
+  - Node check & Ruff scoped: 0 erros.
+  - Push no fork: commit `92e6623c` na branch `fix/picker-routing-id-persist`.
+- Status: ✅ Concluído e enviado.
+
+### hermes-webui — PR #7399
+- O que fiz: corrigi os 3 defeitos apontados na revisão de refetch de catálogo: (1) invalidação do número de geração de requisição (`bumpModelDropdownRequestSeq()`) na troca de perfil em `static/panels.js` e guarda de mutação de variáveis globais de perfil stale em `static/ui.js`; (2) preservação de texto de busca (`.model-search-input`), input de modelo customizado (`.model-custom-input`) e foco ativo durante o refetch e re-render do dropdown em `static/ui.js`; (3) unificação do rastreamento de hidratação via `window._trackModelCatalogHydration` e coalescência de requisições de live models em voo em `static/ui.js` e `static/sessions.js`. Mesclado com `upstream/master`.
+- Evidência:
+  - Verde local: 7/7 passed em `tests/test_issue7227_picker_catalog_refetch.py`.
+  - Node check: 0 erros de sintaxe.
+  - Push no fork: commit `cd624baf` na branch `fix/picker-refetch-catalog`.
+- Status: ✅ Concluído e enviado.
+
+### hermes-webui — PR #7292
+- O que fiz: solucionei o conflito estrutural entre #2051 e #7290 em `static/ui.js::_isEquivalentConfiguredModelEntry()`. Consolidada a autoridade de provedor com fallback de badge (`_entryProvider(entry)`) para opções de topo e entradas temporárias, mantendo a ordem estrita de checagem do prefixo de barra e `@provider:` exigida pelas regras estruturais de regressão do #2051. Mesclado com `upstream/master`.
+- Evidência:
+  - Verde local: 22/22 passed em `tests/test_configured_model_picker_dedup.py`, `tests/test_issue7290_no_slash_prefixed_alias.py` e `tests/test_issue2051_duplicate_model_picker_entry.py`.
+  - Node check & Ruff scoped: 0 erros.
+  - Push no fork: commit `b56d92f3` na branch `fix/7290-provider-prefix-badge-dedup`.
+- Status: ✅ Concluído e enviado.
+
 
 
