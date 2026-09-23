@@ -334,13 +334,19 @@ Na dúvida de qual lado assumir: o Marcos decide — um pedido vale um lado por 
 - Próximo passo:
 ```
 
+**Ledger de ações (`ACOES.md`) — obrigatório nos DOIS lados:** além da narrativa do LOG, **toda
+ação executada** vira **UMA linha append-only** no [`ACOES.md`](ACOES.md), no formato
+`AAAA-MM-DD | executor | repo | ação | ref(s) | status`, com o executor certo:
+`[antigravity]` para o PC, `[hermes:webui]` / `[hermes:telegram]` / `[hermes:cron]` / `[hermes:vps]`
+para a VPS. É o arquivo que responde “quem fez o quê” por filtro — não substitui o LOG, completa-o.
+
 **Rotina do Antigravity ao fechar a sessão:**
 
 ```bash
 cd <pasta do playbook>
 git pull --rebase origin main     # sempre antes de push (append-only → conflito quase impossível)
 # …acrescente a seção do dia no LOG.md…
-git add LOG.md && git commit -m "log: trabalho do Antigravity em YYYY-MM-DD"
+git add LOG.md ACOES.md && git commit -m "log: trabalho do Antigravity em YYYY-MM-DD"
 git push origin main              # NUNCA --force
 ```
 
