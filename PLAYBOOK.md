@@ -176,6 +176,30 @@ git fetch upstream && git log --oneline -S'<trecho exato do defeito>' upstream/<
 Se a issue for de terceiro e houver PR concorrente: **não abra PR duplicado** — comente com a sua
 medição/apoio apenas se acrescentar algo novo.
 
+### 5.1 Coordenação VPS × PC (os dois lados no mesmo fork)
+
+VPS (Hermes) e PC (Antigravity) usam a **mesma conta e o mesmo fork**, e os dois podem ser
+acionados a qualquer momento pelo Marcos. PR duplicado para a mesma issue é o pior erro possível.
+Antes de iniciar QUALQUER issue, no lado que for:
+
+1. `git pull --rebase origin main` no playbook e ler as entradas recentes do `LOG.md`
+   (é o registro do que o outro lado fez/prometeu).
+2. Checar se o outro lado já começou:
+   ```bash
+   gh pr list -R <upstream> --state all --search "<N>"   # já existe PR pra issue?
+   gh issue view <N> -R <slug> --json comments           # "pego esta"/comentário nosso?
+   git ls-remote origin 'refs/heads/*<N>*'               # branch já pushada no fork?
+   ```
+3. **Começou (branch pushada, claim respondido, PR aberto) ⇒ não pegue a mesma issue** — escolha
+   outra. Se for RETOMAR o trabalho do outro lado, faça no **mesmo branch/PR** (continuidade:
+   `git fetch origin && git checkout <branch>`), nunca um branch/PR novo.
+4. Deskcomm mantém o claim de 48h ("pego esta" = precedência). Nos repos do Hermes, onde não há
+   claim, **o primeiro a pushar `fix/<N>-*` tem a precedência**.
+5. Os crons da VPS (claim de issues, watchdogs de menção) rodam independentemente — o sinal deles
+   é comentário/branch no GitHub, então as regras acima já os cobrem.
+
+Na dúvida de qual lado assumir: o Marcos decide — um pedido vale um lado por vez.
+
 ---
 
 ## 6. Fluxo de trabalho por repo
