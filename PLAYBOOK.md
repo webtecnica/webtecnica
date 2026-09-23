@@ -290,6 +290,9 @@ Na dúvida de qual lado assumir: o Marcos decide — um pedido vale um lado por 
    # pnpm gov:verify NÃO cobre cercas/test:shell — não use como única régua
    ```
    Depois: `bash .agents/skills/deskcomm-contribuir/scripts/pre-voo.sh`.
+   **`O que NÃO medi` declara o COMANDO tentado + o ERRO** — não a categoria do ambiente: se o
+   mesmo runner (vitest/node) já rodou no PC, o gate vizinho é obrigado a ser tentado;
+   `test:shell` (bash) é a exceção legítima em Windows.
 5. Sabotagem contada → commit conventional (**prefixo EN, descrição PT-BR**, escopo EPIC se couber:
    `fix(EPIC-03): ...` — catálogo em `docs/stories/epics/MASTER.md`).
 6. Fragmento de release `.changes/<kebab>.md` quando o operador da VPS percebe a mudança, fechando

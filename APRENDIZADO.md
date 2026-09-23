@@ -38,3 +38,25 @@
   `NULL` de propósito) — se aparecer no PR, é para questionar na issue, não aceitar calado.
 - Paralelo vivo: mesmo tema (pricing) no agent — PR nosso #119717 (MiMo); regra comum dos dois
   repos = **preço sem link da doc do provedor não entra**.
+
+## 2026-09-23
+
+### 🪟 PC é Windows — o que muda na régua honesta (2ª rodada, PR #1486 / issue #1478)
+- Confirmado no corpo do PR: **"ambiente local Windows"**. Medido:
+  - `pnpm test:shell` = bash puro → não roda em Windows (sem WSL): declaração legítima.
+  - `pnpm cercas` foi agrupado na mesma desculpa "POSIX/globs" — **não cola**: o mesmo runner
+    (vitest) **rodou** no PC (40 testes do `pricing.test.ts`) e typecheck/lint/build (node)
+    também. Cercas é `vitest run --project cercas`; se falhar no Windows, o "O que NÃO medi"
+    tem que trazer o **erro da tentativa**, não a categoria do ambiente.
+  - Juiz final = CI: verify do #1482 passou 13/13 (inclui cercas) — o risco só vira retrabalho
+    quando o vermelho do CI aparece.
+- **Regra destilada → PLAYBOOK §6.3:** "O que NÃO medi" = comando tentado + erro; mesmo runner
+  já rodando no ambiente obriga a tentar o gate vizinho.
+- Padrões que se confirmaram (2ª vez): linha `✅ TAREFAS CONCLUÍDAS` adotada; claim ~22 min antes
+  do PR (03:07 vs 03:30); `.changes/` com crédito ao PR — e amendaram um commit só pra citar
+  `#1486`, exatamente a regra do crédito; fonte oficial citada **no código** com data
+  (`openai.com/api/pricing`, conferidas 2026-09) — ressalva da rodada 1 resolvida.
+- Escopo conferido: 3 arquivos exatos (pricing.ts + teste + fragmento), 4 commits todos
+  `webtecnica`, `Closes #1478` sem crases (`closingIssuesReferences=[1478]`), CI na conferência:
+  3 pass / 12 pending / 0 fail. Delta: deskcomm abertos 2 (#1482+#1486), merged 125; agent 434 /
+  webui 126 sem mudança. Watchdog detectou o push (state=`9cb9dba`) com alvo telegram corrigido.
