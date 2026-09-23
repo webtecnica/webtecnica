@@ -40,6 +40,27 @@
   - O que NÃO medi: `pnpm test:shell` (depende de utilitários shell bash no runner Linux do CI); `pnpm test:db` e `test:e2e` (sem Docker local e sem alteração de schema/RLS).
   - Vínculo verificado: `gh pr view 1486 -R melgarafael/DeskcommCRM --json closingIssuesReferences` vinculando a #1478; comentário "PR: #1486" adicionado na issue.
 - Status: ✅ TAREFAS CONCLUÍDAS (PR #1486 aberto aguardando revisão de @melgarafael)
-- Próximo passo: acompanhar feedback no PR #1486.
+### hermes-webui — PR #7647
+- O que fiz: corrigi a quebra de paridade de i18n em 10 suítes de locale adicionando as traduções das chaves `saved_prompts_delete_confirm` e `saved_prompts_deleted` em todos os 14 idiomas em `static/i18n.js`.
+- Evidência:
+  - Vermelho inicial: 12 jobs falhando no CI com `AssertionError` em `test_czech_locale.py`, `test_zh_hant_locale.py`, etc.
+  - Verde local: 27/27 passed em `pytest tests/test_czech_locale.py tests/test_zh_hant_locale.py tests/test_chinese_locale.py tests/test_issue7644_saved_prompt_delete_confirm.py`.
+  - CI oficial: 24/24 passed (100% GREEN) no commit `d2ecf3d7`.
+- Status: ✅ Concluído e aprovado nos gates do CI.
+
+### hermes-webui — PR #7559
+- O que fiz: isentei a rota `/api/session/archive` da guarda genérica de visibilidade pré-handler em `api/routes.py`, mantendo a autorização de perfil ativo no handler para requisições comuns e permitindo a restauração (unarchive) de sidecars de outros perfis via `all_profiles=1`. Adicionado teste de round-trip arquivar/restaurar em `tests/test_issue7549_archive_all_profiles.py` e resolvido conflito com `upstream/master`.
+- Evidência:
+  - Verde local: 9/9 passed em `pytest tests/test_issue7549_archive_all_profiles.py`.
+  - CI oficial: 24/24 passed (100% GREEN) no commit `2ac61a53`.
+- Status: ✅ Concluído e aprovado nos gates do CI.
+
+### hermes-webui — PR #7610
+- O que fiz: refatorei a lógica de OOB steer writeback em `api/streaming.py` para extração in-place do texto do usuário a partir de linhas tipadas `role: user, display_kind: 'steer'` (unwrapping de frame único validado), preservando linhas de ferramentas legadas e marcadores malformados/múltiplos byte a byte. Atualizado `docs/rfcs/webui-pending-intent-controls.md` e suíte de testes `tests/test_issue7600_oob_display_writeback.py`. Mesclado com `upstream/master`.
+- Evidência:
+  - Verde local: 5/5 passed em `pytest tests/test_issue7600_oob_display_writeback.py`.
+  - Push no fork: commit `61832550`.
+- Status: 🟡 CI disparado e em execução.
+
 
 
