@@ -42,5 +42,11 @@ Repo: `agent` | `webui` | `deskcomm` | `infra` (playbook/ecossistema)
 2026-09-23 | antigravity | deskcomm | issue #1512 → PR #1550 (suportar baseUrl com ou sem /v1 na transcricao) | #1550 / 06d3bc1 | open
 2026-09-23 | antigravity | deskcomm | issue #1493 → PR #1551 (isolar atualizacao de template zernio por session_id) | #1551 / 5394a23 | open
 2026-09-23 | antigravity | deskcomm | issue #1399 → PR #1552 (gravar ctwa_clid em ad_source_id e preservar ad_id) | #1552 / 811ecc0 | open
+2026-09-23 | antigravity | deskcomm | issue #1434 → PR #1553 (e2e trunk-sip host sem letras puras) | #1553 / 74deaac | open
+2026-09-23 | antigravity | deskcomm | issue #1426 → PR #1554 (adicionar META_WEBHOOK_BASE_URL) | #1554 / d89812b | open
+2026-09-23 | antigravity | deskcomm | issue #1436 → PR #1555 (crm_find_free_slots tolera dia e dias_a_frente) | #1555 / 2120296 | open
+2026-09-23 | antigravity | deskcomm | issue #1491 → PR #1556 (freio de envio por token antes de abrir conversa e teto org) | #1556 / 74fb9bf | open
+2026-09-23 | antigravity | deskcomm | issue #1246 → PR #1557 (cerca de escrita em organizations com escopo lexico e exports) | #1557 / d680f1a | open
+
 
 

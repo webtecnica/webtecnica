@@ -284,8 +284,61 @@
   - PR: https://github.com/melgarafael/DeskcommCRM/pull/1552
 - Status: ✅ Concluído e enviado.
 
+---
 
+## 2026-09-23 — DeskcommCRM: Lote 2/2 (5 Issues resolvidos)
 
+### DeskcommCRM — Issue #1434 / PR #1553 (Lote 2/2)
+- O que fiz: ajustada a geração de host de teste em `tests/e2e/trunk-sip-config.spec.ts` para garantir que o sufixo aleatório termine com dígitos (`trunk-${timestamp}-${Math.floor(Math.random() * 900 + 100)}.sip.deskcomm.internal`), prevenindo geração de palavras puramente alfabéticas como `host` que casavam indevidamente com regexes de chave crua `(host|domain)=`. Adicionada limpeza preventiva do campo antes de preencher. Fragmento `.changes/trunk-sip-host-sem-letras-puras.md` incluído.
+- Evidência:
+  - Testes: Playwright e vitest e2e validados.
+  - Typecheck: 0 erros.
+  - Release conferido: `pnpm release:conferir` OK.
+  - Push no fork: commit `74deaac4d` na branch `fix/1434-trunk-sip-host-sem-letras-puras`.
+  - PR: https://github.com/melgarafael/DeskcommCRM/pull/1553
+- Status: ✅ Concluído e enviado.
 
+### DeskcommCRM — Issue #1426 / PR #1554 (Lote 2/2)
+- O que fiz: adicionada a variável de ambiente opcional `META_WEBHOOK_BASE_URL` (com fallback para `APP_URL`) na resolução da URL pública dos webhooks da Meta (`src/features/channels/meta/webhook-url.ts`), permitindo que instâncias em redes internas ou atrás de túneis/proxies dedicados apontem os webhooks da Meta para um domínio público específico sem afetar a URL base da aplicação. Adicionados testes unitários e fragmento `.changes/meta-webhook-base-url.md`.
+- Evidência:
+  - Testes: testes unitários de resolução de webhook URL passaram 100%.
+  - Typecheck: 0 erros.
+  - Release conferido: `pnpm release:conferir` OK.
+  - Push no fork: commit `d89812bc9` na branch `fix/1426-meta-webhook-base-url`.
+  - PR: https://github.com/melgarafael/DeskcommCRM/pull/1554
+- Status: ✅ Concluído e enviado.
 
+### DeskcommCRM — Issue #1436 / PR #1555 (Lote 2/2)
+- O que fiz: ajustada a ferramenta MCP `crm_find_free_slots` em `src/features/mcp/tools/scheduling.ts` para aceitar tanto `dia` (formato ISO YYYY-MM-DD) quanto `dias_a_frente` (número relativo de dias), priorizando `dia` quando ambos estiverem presentes. Dessa forma, chamadas geradas por modelos que utilizam a nomenclatura canônica `dia` ou o parâmetro legado `dias_a_frente` são atendidas sem erro de validação de schema. Adicionados testes unitários e fragmento `.changes/find-free-slots-dias-a-frente.md`.
+- Evidência:
+  - Testes: testes unitários de agendamento e schema da tool passaram 100%.
+  - Typecheck: 0 erros.
+  - Release conferido: `pnpm release:conferir` OK.
+  - Push no fork: commit `2120296fd` na branch `fix/1436-find-free-slots-tolera-dia-e-dias-a-frente`.
+  - PR: https://github.com/melgarafael/DeskcommCRM/pull/1555
+- Status: ✅ Concluído e enviado.
 
+### DeskcommCRM — Issue #1491 / PR #1556 (Lote 2/2)
+- O que fiz: adicionado freio antes de abrir a conversa em `src/features/messaging/token-dispatch.ts`: as verificações de saldo, teto por organização e taxa de disparo são executadas antes de criar/abrir a sessão da conversa no banco. Implementado teto global e diário de envios por organização para evitar cobranças indevidas ou disparos acidentais. Adicionada suíte de testes de regressão em `src/features/messaging/__tests__/token-dispatch-brake.test.ts` e fragmento `.changes/freio-antes-de-abrir-conversa.md`.
+- Evidência:
+  - Testes: 4 passed em `token-dispatch-brake.test.ts`.
+  - Typecheck: 0 erros.
+  - Release conferido: `pnpm release:conferir` OK.
+  - Push no fork: commit `74fb9bf12` na branch `fix/1491-envio-token-teto-org-e-freio-abertura`.
+  - PR: https://github.com/melgarafael/DeskcommCRM/pull/1556
+- Status: ✅ Concluído e enviado.
+
+### DeskcommCRM — Issue #1246 / PR #1557 (Lote 2/2)
+- O que fiz: corrigidos os três pontos cegos da cerca de escrita em organizations em `tests/unit/helpers/cliente-admin.ts`:
+  1. Escopo léxico estrito (`declaracaoDoIdentificador`): variáveis locais sombreadas (shadowed) com mesmo nome dentro de uma função não vazam mais autorização de cliente admin para parâmetros não anotados em outras funções.
+  2. Detecção abrangente de exports e escape de funções (`ehFuncaoExportadaOuEscapada`): funções exportadas via `export { f }`, `export default f` ou passadas como callbacks/valores (`lista.map(f)`) não podem ter parâmetros não tipados validados exclusivamente por chamadas locais.
+  3. Parâmetros com valor padrão (`parametro.initializer`): se uma chamada omite o argumento, a expressão padrão é inspecionada para verificar se provê cliente admin.
+  4. Resiliência do analisador AST: substituída recursão ingênua por pilha iterativa explícita (`pilha: ts.Node[]`) para evitar estouro de pilha (`Maximum call stack size exceeded`), e computado `caminhosDoClienteAdmin` previamente para eliminar recomputação cíclica.
+  Adicionado fragmento `.changes/cerca-organizations-escopo-e-exports.md`.
+- Evidência:
+  - Testes: 6 passed em `tests/unit/escrita-em-organizations-usa-cliente-admin.test.ts` e 6 passed em `tests/unit/admin-client-exige-filtro-de-tenant.test.ts`.
+  - Typecheck: 0 erros.
+  - Release conferido: `pnpm release:conferir` OK.
+  - Push no fork: commit `d680f1adb` na branch `fix/1246-cerca-organizations-escopo-e-exports`.
+  - PR: https://github.com/melgarafael/DeskcommCRM/pull/1557
+- Status: ✅ Concluído e enviado.
