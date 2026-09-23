@@ -59,7 +59,7 @@
 - O que fiz: refatorei a lógica de OOB steer writeback em `api/streaming.py` para extração in-place do texto do usuário a partir de linhas tipadas `role: user, display_kind: 'steer'` (unwrapping de frame único validado), preservando linhas de ferramentas legadas e marcadores malformados/múltiplos byte a byte. Atualizado `docs/rfcs/webui-pending-intent-controls.md` e suíte de testes `tests/test_issue7600_oob_display_writeback.py`. Mesclado com `upstream/master`.
 - Evidência:
   - Verde local: 5/5 passed em `pytest tests/test_issue7600_oob_display_writeback.py`.
-  - Push no fork: commit `61832550`.
+  - Push no fork: commit `6caa0c19` (com ruff scoped 100% limpo).
 - Status: 🟡 CI disparado e em execução.
 
 
