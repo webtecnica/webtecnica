@@ -30,3 +30,7 @@ Repo: `agent` | `webui` | `deskcomm` | `infra` (playbook/ecossistema)
 2026-09-23 | hermes:webui | webui | Onda de 4 CRs (deleg_8c420a9c): #7647 → 5c1b1dea, #7651 → 4b791bd8, #7743 → 301ed54a (comentarios de re-gate postados) | 3 PRs | done
 2026-09-23 | hermes:webui | webui | CR #7098: filho estourou timeout (35 calls) — worktree c/ diff parcial NAO commitado → arremate despachado | #7098 / 8952b75 | andamento
 2026-09-23 | hermes:webui | infra | ACOES.md criado + regras de marcação em todos os canais (PLAYBOOK §7, AGENTS.md, skill) | este arquivo | done
+2026-09-23 | antigravity | deskcomm | issue #1451 → PR #1508 (inbox: contencao de layout e quebra de palavras) | #1508 / ccc9d05 | open
+2026-09-23 | antigravity | deskcomm | PR #1509 (validacao de credenciais OpenRouter aceita gate) | #1509 / 863fe9d | open
+2026-09-23 | antigravity | webui | Lote de CRs batch1+2: #7559→2ac61a5, #7610→6caa0c1 (CI rodando), #7284→17c9205; #7418 #7417 #7400 #7399 #7292 enviados | 8 PRs | done
+2026-09-23 | antigravity | webui | #7647 follow-up i18n (18 locales) EMPILHADO no nosso 5c1b1dea (finding 4) — divisao complementar comprovada por ancestry | d2ecf3d7 | done
