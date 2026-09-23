@@ -116,5 +116,20 @@
   - Push no fork: commit `b56d92f3` na branch `fix/7290-provider-prefix-badge-dedup`.
 - Status: ✅ Concluído e enviado.
 
+### hermes-webui — PR #7284
+- O que fiz: atendi os 4 apontamentos da revisão do mantenedor em `api/route_approvals.py` e `static/messages.js`:
+  1. Identidade completa de aprovação na chave de dispensa: incluído `(session_id, approval_id, run_id, mirror_token)` com namespacing por perfil ativo (`activeProfile`), permitindo reuso de `approval_id` em runs subsequentes da mesma sessão.
+  2. Limpeza da fila interna `_gateway_queues`: ao aposentar entradas por `run_id` terminal, remove instâncias correspondentes da fila de gateway sem exigir que `approval_id` esteja setado.
+  3. Isolamento multi-aba e de respostas atrasadas no polling fallback: `_startApprovalFallbackPoll` valida tupla do proprietário (`sid`, `approval_id`, `run_id`, `mirrorToken`) contra o card ativo antes de ocultar com `hideApprovalCard(true)`, e não limpa projeções pendentes de sessões que já avançaram para sucessores.
+  4. Diferenciação de 404 autoritativo: mantém dispensa apenas quando o corpo da resposta traz `approval_not_found`, restaurando o card para retentativa em casos de 404 genérico / sobrecarregado (ex: troca de perfil concorrente).
+  Adicionados testes comportamentais completos em `tests/test_issue7242_approval_flyout_dismiss.py`. Mesclado com `upstream/master`.
+- Evidência:
+  - Verde local: 41/41 passed em `tests/test_issue7242_approval_flyout_dismiss.py` + 37/37 em testes relacionados de aprovações.
+  - Node check: 0 erros de sintaxe em `static/messages.js`.
+  - Ruff scoped: 0 erros.
+  - Push no fork: commit `17c9205e` na branch `fix/7242-approval-flyout-dismiss`.
+- Status: ✅ Concluído e enviado.
+
+
 
 
