@@ -294,10 +294,24 @@ git add LOG.md && git commit -m "log: trabalho do Antigravity em YYYY-MM-DD"
 git push origin main              # NUNCA --force
 ```
 
-**Como eu monitoro (Hermes):** a cada rodada eu rodo `git pull` neste repo, leio as entradas novas
-do `LOG.md` (`git log -p -- LOG.md`) e **confiro contra a realidade do GitHub**
-(`gh pr list/gh issue view` com os números citados). O log é autodeclarado — vale o que o GitHub
-mostra; divergência eu aponto e corrijo aqui.
+**Aviso de conclusão (obrigatório — este é o sinal de “terminei”):**
+quando **TODAS** as tarefas instruídas estiverem terminadas — ou o trabalho interromper —, a última
+entrada do `LOG.md` deve trazer, obrigatoriamente, uma destas linhas no campo Status:
+
+```markdown
+- Status: ✅ TAREFAS CONCLUÍDAS (<N> issues/PRs: #a, #b, …)
+- Status: ⛔ INTERROMPIDO: <motivo exato + o que falta>
+```
+
+O `git push` com essa linha é o gatilho: um watchdog na VPS vigia commits novos em `LOG.md`
+(cron `antigravity-log-watch`, a cada 15 min) e dispara notificação quando detecta — o push
+final **não pode faltar**, mesmo que o resultado seja “interrompido”. Trabalho sem push de
+conclusão = o monitoramento não sabe que você terminou.
+
+**Como eu monitoro (Hermes):** no sinal do watchdog (ou a pedido do Marcos) eu rodo `git pull`
+neste repo, leio as entradas novas do `LOG.md` (`git log -p -- LOG.md`) e **confiro contra a
+realidade do GitHub** (`gh pr list/gh issue view` com os números citados). O log é autodeclarado —
+vale o que o GitHub mostra; divergência eu aponto e corrijo aqui.
 
 **O que registrar sempre:** números de issue/PR, branch, o que foi medido, o que ficou de fora e
 o status real. Se o trabalho no PC criou commit mas não empurrou, dizer isso no log (“não pushado”)
