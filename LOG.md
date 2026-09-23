@@ -148,6 +148,88 @@
   - PR aberto: #1509 (fechando #1376).
 - Status: ✅ Concluído e PR aberto.
 
+### hermes-agent — PR #91094 (Lote 1/2)
+- O que fiz: resolvi o apontamento de revisão de Keeltrace sobre a lógica de tratamento de mensagem vazia do assistente ao final do stream. A lógica no loop já estava corrigida (`msg.get("role") == "assistant"`), e adicionei a regressão `test_repair_owner_repairs_final_empty_assistant_and_preserves_final_user` em `tests/run_agent/test_partial_stream_finish_reason.py` garantindo que a mensagem vazia final é reparada e a mensagem do usuário preservada.
+- Evidência:
+  - Sabotagem inicial: 1 falha confirmada quando invertida a condição.
+  - Verde local: 2/2 passed em `tests/run_agent/test_partial_stream_finish_reason.py`.
+  - Ruff: 0 erros.
+  - Push no fork: commit `b604a2003f` na branch `fix/91027-issue`.
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — PR #91101 (Lote 1/2)
+- O que fiz: atendi à revisão de Keeltrace sobre encoding UTF-8 no hook de reescrita HTTPX em `agent/process_bootstrap.py`. Em HTTPX 0.28.1, requisições em `async_mode=True` com reescrita síncrona/ByteStream falhavam e `request._content` não era sincronizado. Atualizado para preencher `request._content = new_body` junto com `request.stream` tanto em modo síncrono quanto assíncrono. Adicionada suíte de testes `tests/agent/test_json_encoding_hook.py` testando requisições reais com MockTransport em sync e async com caracteres multibyte e emojis UTF-8.
+- Evidência:
+  - Verde local: 2/2 passed em `tests/agent/test_json_encoding_hook.py`.
+  - Ruff: 0 erros.
+  - Push no fork: commit `0161c57534` na branch `fix/91031-issue`.
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — PR #92031 (Lote 1/2)
+- O que fiz: verifiquei e cobri a recomendação de Enough1122 em `hermes_cli/kanban_db.py` exigindo marcadores estruturados de evidência (`result:`, `evidence:`, `completed:`) para permitir transição de tarefas em estado `gave_up` por comentários do assignee (linhas 111 e 2810 em `_COMPLETABLE_STATUS_SQL`).
+- Evidência:
+  - Verde local: 5/5 passed em `tests/hermes_cli/test_kanban_gave_up_completion.py` em 4.96s.
+  - Ruff: 0 erros.
+  - Push no fork: commit `4022a27769` na branch `fix/91833-issue`.
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — PR #91575 (Lote 1/2)
+- O que fiz: adicionei testes de cobertura apontados na revisão de Enough1122 para as duas novas paradas em `run_kanban_goal_loop` (`hermes_cli/kanban_goal_mode.py`): parada por falha de transporte do juiz (`test_loop_stops_on_judge_transport_failure`) e parada por flag de falha do worker (`test_loop_stops_on_worker_failed_flag`) em `tests/hermes_cli/test_kanban_goal_mode.py`.
+- Evidência:
+  - Sabotagem inicial: 1 falha confirmada sem o break de transporte.
+  - Verde local: 6/6 passed em `tests/hermes_cli/test_kanban_goal_mode.py` em 0.89s.
+  - Ruff: 0 erros.
+  - Push no fork: commit `898ca236b1` na branch `fix/91264-issue`.
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — PR #91604 (Lote 1/2)
+- O que fiz: atendi ao apontamento de Enough1122 sobre mascaramento de comandos inline no interpretador em `cron/lifecycle_guard.py`. O mascaramento por blocklist criava brechas onde comandos destrutivos podiam ser mascarados. Refatorado para allowlist estrita (`_BENIGN_PRINT_RE`, `_INTERPRETER_NAME_RE` e `_RISKY_PAYLOAD_MARKERS`), garantindo que apenas instruções benignas puras de exibição/print sem imports ou símbolos destrutivos sejam mascaradas. Adicionado `eval` em `_INTERPRETER_EXEC_FLAGS`.
+- Evidência:
+  - Verde local: 8/8 passed em `tests/cron/test_lifecycle_guard_inline_exec.py`.
+  - Ruff: 0 erros.
+  - Push no fork: commit `9dfa92ef34` na branch `fix/91433-issue`.
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — PR #107604 (Lote 2/2)
+- O que fiz: incorporei a recomendação de Finn763 sobre chamadas de sumário/stream direto que utilizavam o cliente OpenAI compartilhado sem suporte ao `_shared_openai_client_in_use()`. Adicionado o gerenciador de contexto `_shared_client_bracket` em `agent/client_lifecycle.py`, rastreando requisições em voo com `_shared_client_in_flight`. Aplicado o bracket em `_chat_summary_attempt` (`agent/chat_completion_helpers.py`) e `run_codex_stream` (`agent/codex_runtime.py`). Adicionadas regressões em `tests/run_agent/test_107475_agent_close_shared_client_in_flight.py`.
+- Evidência:
+  - Verde local: 5/5 passed em `tests/run_agent/test_107475_agent_close_shared_client_in_flight.py` em 1.58s.
+  - Ruff: 0 erros.
+  - Push no fork: commit `1da1e6065f` na branch `fix/issue107475`.
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — PR #90991 (Lote 2/2)
+- O que fiz: atendi os apontamentos de revisão de Enough1122 em `agent/copilot_acp_client.py`: (1) permitida a finalização autoritativa via `session/update` terminal mesmo quando `text_parts` estiver vazio (como em turnos de apenas raciocínio ou apenas chamadas de ferramentas); (2) enriquecido o retorno sintético com metadados de telemetria (`completedViaTerminalUpdate: True`, `terminalUpdateKind` e `stopReason: "end_turn"`). Adicionada regressão para raciocínio puro em `tests/agent/test_copilot_acp_client.py`.
+- Evidência:
+  - Verde local: 15/15 passed em `tests/agent/test_copilot_acp_client.py` em 3.11s.
+  - Ruff: 0 erros.
+  - Push no fork: commit `e379f88367` na branch `fix/90952-copilot-acp-gateway-hang`.
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — PR #104627 (Lote 2/2)
+- O que fiz: verifiquei a resolução completa dos apontamentos de revisão de andrexibiza e Enough1122 em `tools/kanban_tools.py` e `tests/tools/test_kanban_tools.py`: conclusões opcionais (`neutral`, `skipped`) não vetam mais o gate de CI de head exato quando as checagens obrigatórias passam (`_OPTIONAL_CONCLUSIONS = frozenset({"neutral", "skipped"})`), e a API de `check-runs` agora pagina resultados com `per_page=100`.
+- Evidência:
+  - Verde local: 61/61 passed em `tests/tools/test_kanban_tools.py` em 26.63s.
+  - Ruff: 0 erros.
+  - Confirmado no fork: commit `15070b986d` na branch `fix/issue104595-kanban-ci-gate`.
+- Status: ✅ Concluído e verificado.
+
+### hermes-agent — PR #91580 (Lote 2/2)
+- O que fiz: atendi ao apontamento de Enough1122 documentando formalmente e defendendo o contrato de `BROWSER_TAB_ID` em `apps/desktop/src/app/chat/right-rail/preview-browser-bar.tsx` (operação idempotente e segura caso o rail tenha sido fechado por outro caminho). Adicionada asserção e teste unitário cobrindo o clique no glyph de fechar chamando `closeRightRailTab(BROWSER_TAB_ID)` em `preview-browser-bar.test.tsx`.
+- Evidência:
+  - Cobertura estática e testes unitários adicionados.
+  - Push no fork: commit `13992ea05a` na branch `feat/91499-issue`.
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — PR #91098 (Lote 2/2)
+- O que fiz: atendi à revisão de Enough1122 garantindo que o reset de `$newChatProfile` cubra todas as portas de entrada de nova sessão: em `openNewSessionTile` (`use-session-actions/index.ts`) para abas não-listadas/draft, em `startSessionInWorkspace` e `onNewSessionSplit` em `apps/desktop/src/app/contrib/wiring.tsx`. Adicionado teste de regressão em `use-session-actions.test.tsx` verificando que `$newChatProfile` é redefinido para `null` após a abertura de uma aba rascunho.
+- Evidência:
+  - Teste de regressão adicionado no harness de `use-session-actions.test.tsx`.
+  - Push no fork: commit `567be7f6af` na branch `fix/91089-issue`.
+- Status: ✅ Concluído e enviado.
+
+- Status: ✅ TAREFAS CONCLUÍDAS (10 PRs: #91094, #91101, #92031, #91575, #91604, #107604, #90991, #104627, #91580, #91098)
+
 
 
 
