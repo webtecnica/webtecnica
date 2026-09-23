@@ -202,6 +202,29 @@ Na dúvida de qual lado assumir: o Marcos decide — um pedido vale um lado por 
 
 ---
 
+## 9. Como este playbook evolui (3 arquivos, um escritor por arquivo)
+
+| Arquivo | Escritor | Papel |
+|---|---|---|
+| `PLAYBOOK.md` | Hermes (VPS) | **doutrina viva** — só regra destilada e ainda válida; legível de ponta a ponta |
+| `APRENDIZADO.md` | Hermes (VPS) | **caderno append-only datado** — armadilhas medidas, incidentes, feedback de mantenedor, dos dois lados |
+| `LOG.md` | Antigravity (PC) | atividade + lições brutas do PC (campo “Aprendizado”, se quiser sugerir) |
+
+**Pipeline de inteligência:**
+
+1. **Desenvolvimento na VPS** que afeta os dois lados (nova armadilha do Deskcomm, mudança de
+   gate, lição de review) → regra vai **direto no PLAYBOOK** na mesma rodada.
+2. **Rodada de conferência do PC** → lição crua datada entra no **APRENDIZADO.md**; se durar,
+   repetir e valer para os dois lados, é **destilada** para o PLAYBOOK (e a versão velha é cortada
+   aqui — o PLAYBOOK não acumula histórico).
+3. **Tamanho é contrato:** o Antigravity lê o PLAYBOOK inteiro antes de trabalhar. Se uma seção
+   inflar, o detalhe migra pro APRENDIZADO e o PLAYBOOK guarda ~3 linhas + ponteiro.
+4. **O que NÃO entra aqui:** estado temporário (PR aberto/merged, “falta X”), logs de atividade
+   (→ LOG) e procedimentos exclusivos da VPS (→ skills do Hermes). Número de PR/issue só como
+   evidência datada, nunca como afirmação de estado permanente.
+
+---
+
 ## 6. Fluxo de trabalho por repo
 
 ### 6.1 hermes-agent (EN, `main`)
