@@ -230,6 +230,61 @@
 
 - Status: ✅ TAREFAS CONCLUÍDAS (10 PRs: #91094, #91101, #92031, #91575, #91604, #107604, #90991, #104627, #91580, #91098)
 
+---
+
+## 2026-09-23 — DeskcommCRM: Lote 1/2 (5 Issues resolvidos)
+
+### DeskcommCRM — Issue #1542 / PR #1548 (Lote 1/2)
+- O que fiz: alterado `gerarSlug` em `src/features/leads/domain.ts` para converter espaços e sublinhados em hífen (`[_\s]+ -> -`), garantindo consistência com o slugger de colunas do Kanban. Atualizados pontos de busca de etapas padrão em `src/features/leads/agendamento.ts` e `src/features/leads/handoff.ts` para aceitar tanto slug com hífen quanto legado com underline. Fragmento `.changes/slug-etapas-hifen.md` incluído.
+- Evidência:
+  - Testes: 25 passed em `src/features/leads/__tests__/domain.test.ts`, 2 passed em `agendamento.test.ts`.
+  - Typecheck: 0 erros.
+  - Release conferido: `pnpm release:conferir` OK.
+  - Push no fork: commit `885f395394` na branch `fix/1542-slug-etapa-hifen`.
+  - PR: https://github.com/melgarafael/DeskcommCRM/pull/1548
+- Status: ✅ Concluído e enviado.
+
+### DeskcommCRM — Issue #1541 / PR #1549 (Lote 1/2)
+- O que fiz: corrigido `assign_owner` em `src/features/automation/executor.ts` para setar `owner_kind: 'human'` e `owner_agent_id: null` ao atribuir conversa a um usuário humano, evitando estado inconsistente onde `owner_kind` permanecia `bot`. Fragmento `.changes/assign-owner-kind.md` incluído.
+- Evidência:
+  - Testes: 3 passed em `src/features/automation/__tests__/executor-assign-owner.test.ts`.
+  - Typecheck: 0 erros.
+  - Release conferido: `pnpm release:conferir` OK.
+  - Push no fork: commit `332da1f5b3` na branch `fix/1541-assign-owner-kind`.
+  - PR: https://github.com/melgarafael/DeskcommCRM/pull/1549
+- Status: ✅ Concluído e enviado.
+
+### DeskcommCRM — Issue #1512 / PR #1550 (Lote 1/2)
+- O que fiz: normalizado `baseUrl` em `src/features/channels/transcription/client.ts` removendo barras finais e o sufixo `/v1` caso já presente na configuração, antes de montar a URL `/v1/audio/transcriptions`, aceitando tanto `https://api.groq.com/openai/v1` quanto `https://api.groq.com/openai`. Fragmento `.changes/transcricao-base-url-v1.md` incluído.
+- Evidência:
+  - Testes: 6 passed em `src/features/channels/transcription/__tests__/client.test.ts`.
+  - Typecheck: 0 erros.
+  - Release conferido: `pnpm release:conferir` OK.
+  - Push no fork: commit `06d3bc1253` na branch `fix/1512-transcricao-base-url-v1`.
+  - PR: https://github.com/melgarafael/DeskcommCRM/pull/1550
+- Status: ✅ Concluído e enviado.
+
+### DeskcommCRM — Issue #1493 / PR #1551 (Lote 1/2)
+- O que fiz: alterada a cláusula `where` da atualização de templates Zernio em `src/features/channels/templates/zernio-sync.ts` para incluir `channel_session_id: session.id` e `language: tpl.language`, impedindo que conexões Zernio distintas na mesma organização sobrescrevam o status de templates homônimos. Fragmento `.changes/zernio-template-session.md` incluído.
+- Evidência:
+  - Testes: 2 passed em `src/features/channels/templates/__tests__/zernio-sync.test.ts`.
+  - Typecheck: 0 erros.
+  - Release conferido: `pnpm release:conferir` OK.
+  - Push no fork: commit `5394a232d1` na branch `fix/1493-zernio-template-session`.
+  - PR: https://github.com/melgarafael/DeskcommCRM/pull/1551
+- Status: ✅ Concluído e enviado.
+
+### DeskcommCRM — Issue #1399 / PR #1552 (Lote 1/2)
+- O que fiz: ajustada a extração de atribuição em `src/features/leads/tracking.ts` para gravar `ad_source_id` estritamente a partir do ID de clique (`ctwa_clid`, `fbclid`, `gclid`), sem fallback para o ID do anúncio (`ad_id`), preservando o `ad_id` exclusivamente no campo correspondente. Fragmento `.changes/ad-source-id-ctwa-clid.md` incluído.
+- Evidência:
+  - Testes: 8 passed em `src/features/leads/__tests__/tracking.test.ts`.
+  - Typecheck: 0 erros.
+  - Release conferido: `pnpm release:conferir` OK.
+  - Push no fork: commit `811ecc0152` na branch `fix/1399-ad-source-id-ctwa-clid`.
+  - PR: https://github.com/melgarafael/DeskcommCRM/pull/1552
+- Status: ✅ Concluído e enviado.
+
+
 
 
 

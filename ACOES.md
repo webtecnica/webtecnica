@@ -37,4 +37,10 @@ Repo: `agent` | `webui` | `deskcomm` | `infra` (playbook/ecossistema)
 2026-09-23 | hermes:webui | webui | CR #7098 ARREMATE CONCLUIDO: commit ccb23d1d pushado + comentario no PR (13:55Z) — 2 filhos falharam (timeout pytest; filtro de seguranca do MiMo no resumo final), trabalho sobreviveu no git | #7098 / ccb23d1d | done
 2026-09-23 | hermes:webui | webui | Onda webui FECHADA 4/4: #7098 ccb23d1d, #7647 5c1b1dea (+i18n do antigravity d2ecf3d7), #7651 4b791bd8, #7743 301ed54a | 4 CRs | done
 2026-09-23 | antigravity | agent | 10 CRs resolvidos em 2 lotes de cinco: #91094→b604a20, #91101→0161c57, #92031→4022a27, #91575→898ca23, #91604→9dfa92e, #107604→1da1e60, #90991→e379f88, #104627→15070b9, #91580→13992ea, #91098→567be7f | 10 PRs | done
+2026-09-23 | antigravity | deskcomm | issue #1542 → PR #1548 (gerar slug com hifen em etapas criadas pela tela) | #1548 / 885f395 | open
+2026-09-23 | antigravity | deskcomm | issue #1541 → PR #1549 (ajustar owner_kind para human na acao assign_owner) | #1549 / 332da1f | open
+2026-09-23 | antigravity | deskcomm | issue #1512 → PR #1550 (suportar baseUrl com ou sem /v1 na transcricao) | #1550 / 06d3bc1 | open
+2026-09-23 | antigravity | deskcomm | issue #1493 → PR #1551 (isolar atualizacao de template zernio por session_id) | #1551 / 5394a23 | open
+2026-09-23 | antigravity | deskcomm | issue #1399 → PR #1552 (gravar ctwa_clid em ad_source_id e preservar ad_id) | #1552 / 811ecc0 | open
+
 
