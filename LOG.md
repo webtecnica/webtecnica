@@ -130,6 +130,25 @@
   - Push no fork: commit `17c9205e` na branch `fix/7242-approval-flyout-dismiss`.
 - Status: ✅ Concluído e enviado.
 
+### deskcomm — issue #1451 / PR #1508
+- O que fiz: corrigi o estouro de layout do Inbox quando uma mensagem possui textos longos contínuos sem espaços (ex: código Pix copia-e-cola de 150+ chars). Adicionadas classes `[overflow-wrap:anywhere]` e `min-w-0` em `components/inbox/MessageBubble.tsx` (linha externa, bolha, citações e texto apagado), em `components/inbox/NoteCard.tsx`, no container scroller de `components/inbox/ChatThread.tsx` e na coluna de conversa do grid em `components/inbox/InboxLayout.tsx`. Adicionado teste de regressão em `MessageBubble.test.tsx` e fragmento `.changes/inbox-quebra-texto-longo.md`. Mesclado com `upstream/main`.
+- Evidência:
+  - Vermelho inicial: asserção de quebra de palavra e contenção de bolha falhando em `MessageBubble.test.tsx`.
+  - Verde local: 10/10 passed em `pnpm vitest run components/inbox/MessageBubble.test.tsx`.
+  - Régua local: `pnpm typecheck` (exit 0), `pnpm lint` (0 erros).
+  - PR aberto: #1508 (fechando #1451).
+- Status: ✅ Concluído e PR aberto.
+
+### deskcomm — issue #1376 / PR #1509
+- O que fiz: corrigi a validação de credenciais OpenRouter em `lib/ai/provider-validators.ts` (`validateOpenRouterKey`) para instalações self-hosted com `OPENROUTER_BASE_URL` customizada. Quando o endpoint `/key` (proprietário do OpenRouter oficial) devolve 404 em base customizada, o validador agora verifica a autenticidade e obtém o catálogo de modelos via `GET /models` com `Authorization: Bearer <apiKey>`, permitindo validar credenciais e publicar agentes em gateways OpenAI-compatíveis próprios (LiteLLM, vLLM). Adicionados 3 testes unitários de regressão em `lib/ai/provider-validators.test.ts` e fragmento `.changes/openrouter-custom-gateway-validation.md`. Mesclado com `upstream/main`.
+- Evidência:
+  - Vermelho inicial: testes com gateway customizado falhando com `provider_status_404`.
+  - Verde local: 12/12 passed em `lib/ai/provider-validators.test.ts` e 25/25 passed em `tests/unit/provedores-x-registry.test.ts` / `tests/unit/openrouter-alcance.test.ts`.
+  - Régua local: `pnpm release:conferir` (exit 0).
+  - PR aberto: #1509 (fechando #1376).
+- Status: ✅ Concluído e PR aberto.
+
+
 
 
 
