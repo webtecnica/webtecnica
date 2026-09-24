@@ -59,5 +59,9 @@ Repo: `agent` | `webui` | `deskcomm` | `infra` (playbook/ecossistema)
 2026-09-24 | antigravity | webui | CR PR #7418 (lote 1/3): correcao pool credential delete com active profile env materialization | #7418 / 40974e4f | open
 2026-09-24 | antigravity | webui | CR PR #7367 (lote 1/3): bare paths com backtick literal preservados em MEDIA_REF_CLASS e wrap backtick suportado | #7367 / d695819d | open
 2026-09-24 | antigravity | webui | CR PR #7284 (lote 1/3): isolamento de tupla em dismiss, post-await fence no poll e settle de live producers | #7284 / 3bb72f0d | open
+2026-09-24 | antigravity | webui | CR PR #7559 (lote 2/3): identidade composta (session_id, profile) na busca CLI e regressao cross-profile | #7559 / e0beabaf | open
+2026-09-24 | antigravity | webui | CR PR #7399 (lote 2/3): cache estrito profile-scoped live models, guarda de falha obsoleta e docs de arquitetura | #7399 / 84ba014f | open
+2026-09-24 | antigravity | webui | CR PR #7292 (lote 2/3): autoridade uniforme _entryProvider em todas ramificacoes e option top-level preservada | #7292 / c2bc3cbc | open
+
 
 

@@ -456,3 +456,31 @@
   - Push no fork: commit `3bb72f0d` na branch `fix/7242-approval-flyout-dismiss`.
   - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7284#issuecomment-5823735005
 - Status: ✅ Concluído e enviado.
+
+### hermes-webui — CR PR #7559 (Lote 2/3)
+- O que fiz: atendi ao apontamento de revisão de nesquena-hermes tornando `(session_id, profile)` a identidade composta na busca de metadados de sessão CLI. Atualizado `_lookup_cli_session_metadata` para aceitar `requested_profile: str | None = None` e iterar `get_cli_sessions(all_profiles=True)` até encontrar coincidência de session_id e perfil normalizado (via `_profiles_match`). Atualizado `_resolve_cli_import_metadata` para repassar `requested_profile`, impedindo que sessões com mesmo ID em outro perfil bloqueiem a importação/arquivamento. Adicionados testes de regressão no nível de rota cobrindo IDs duplicados em ordem normal, invertida e 404 em perfil inexistente.
+- Evidência:
+  - Testes: 12/12 passed em `tests/test_issue7549_archive_all_profiles.py` em 11.77s.
+  - Python compile: 0 erros.
+  - Push no fork: commit `e0beabaf` na branch `fix/issue7549`.
+  - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7559#issuecomment-5824034363
+- Status: ✅ Concluído e enviado.
+
+### hermes-webui — CR PR #7399 (Lote 2/3)
+- O que fiz: atendi os apontamentos de revisão de nesquena-hermes e greptile: (1) eliminado o fallback desprovido de escopo `_liveModelCache[provider]`, mantendo exclusivamente chaves estritas `${profile}::${provider}` para evitar vazamento de modelos em troca de perfis; (2) adicionada trava de falha obsoleta em `_trackModelCatalogHydration(null, promise)` para que rejeições antigas não limpem `window._modelDropdownReady` caso uma nova hidratação em voo já tenha sido instalada; (3) documentado formalmente o contrato de arquitetura do ciclo de vida e invalidação do model picker no cliente em `docs/architecture/models-cache-invalidation.md`.
+- Evidência:
+  - Testes: 7/7 passed em `tests/test_issue7227_picker_catalog_refetch.py` em 8.45s.
+  - Node check: 0 erros em `static/boot.js` e `static/ui.js`.
+  - Push no fork: commit `84ba014f` na branch `fix/picker-refetch-catalog`.
+  - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7399#issuecomment-5824073161
+- Status: ✅ Concluído e enviado.
+
+### hermes-webui — CR PR #7292 (Lote 2/3)
+- O que fiz: consolidadas todas as ramificações de deduplicação e autoridade de provider em `_isEquivalentConfiguredModelEntry` (`matchingEntries`, `slashPrefix` e `@provider:`) para utilizarem uniformemente `_entryProvider(entry)`, e preservada a autoridade estrutural de provider em options de nível superior em `renderModelDropdown` via `_getOptionProviderId(child)`.
+- Evidência:
+  - Testes: 9/9 passed em `tests/test_configured_model_picker_dedup.py` em 8.90s.
+  - Node check: 0 erros em `static/ui.js`.
+  - Push no fork: commit `c2bc3cbc` na branch `fix/7290-provider-prefix-badge-dedup`.
+  - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7292#issuecomment-5824114059
+- Status: ✅ Concluído e enviado.
+
