@@ -342,3 +342,55 @@
   - Push no fork: commit `d680f1adb` na branch `fix/1246-cerca-organizations-escopo-e-exports`.
   - PR: https://github.com/melgarafael/DeskcommCRM/pull/1557
 - Status: ✅ Concluído e enviado.
+
+---
+
+## 2026-09-24 — hermes-agent: Lote 1/2 (5 Issues resolvidos)
+
+### hermes-agent — Issue #120512 / PR #120967 (Lote 1/2)
+- O que fiz: adicionada `NODE_EXTRA_CA_CERTS` à allowlist de variáveis de ambiente passadas para o executável CLI do Bitwarden (`tools/vault/bitwarden.py`), permitindo que instâncias auto-hospedadas do Vaultwarden protegidas por CA corporativa/privada realizem a validação TLS sem falhar com `UNABLE_TO_VERIFY_LEAF_SIGNATURE`.
+- Evidência:
+  - Testes: suite `tests/agent/test_bitwarden_tls_env.py` verde (1/1 passed).
+  - Push no fork: commit `42af17568f` na branch `fix/120512-bitwarden-node-extra-ca-certs`.
+  - PR: https://github.com/NousResearch/hermes-agent/pull/120967
+  - Comentário no Issue: https://github.com/NousResearch/hermes-agent/issues/120512#issuecomment-5806783061
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — Issue #120528 / PR #120971 (Lote 1/2)
+- O que fiz: adicionada normalização pelo basename (`os.path.basename(skill_name.rstrip("/\\"))`) antes de checar contra as listas de exclusão de deleção `PINNED_SKILLS` e `ESSENTIAL_SKILLS` em `tools/skill_manage.py`, impedindo que skills protegidas sejam acidentalmente excluídas quando referenciadas por caminho relativo ou de categoria (ex.: `system/skill_manage`).
+- Evidência:
+  - Testes: teste unitário em `tests/tools/test_skill_manage_delete_category.py` verde (1/1 passed).
+  - Push no fork: commit `e57135f665` na branch `fix/120528-skill-manage-delete-category-path`.
+  - PR: https://github.com/NousResearch/hermes-agent/pull/120971
+  - Comentário no Issue: https://github.com/NousResearch/hermes-agent/issues/120528#issuecomment-5806819676
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — Issue #120504 / PR #120974 (Lote 1/2)
+- O que fiz: adicionada a função `_find_bash_interpreter()` em `cron/service.py` para resolver executáveis de shell `.sh`/`.bash` no Windows priorizando interpretadores Win32 nativos (Git Bash / MSYS2 / Cygwin em `Program Files\Git\bin\bash.exe`, etc.) e rejeitando o stub do WSL `C:\Windows\System32\bash.exe` (que falha com `execvpe(/bin/bash) failed` na ausência de distribuição WSL instalada).
+- Evidência:
+  - Testes: suite `tests/cron/test_windows_bash_resolver.py` verde (4/4 passed).
+  - Push no fork: commit `a11020b90e` na branch `fix/120504-cron-find-bash-interpreter`.
+  - PR: https://github.com/NousResearch/hermes-agent/pull/120974
+  - Comentário no Issue: https://github.com/NousResearch/hermes-agent/issues/120504#issuecomment-5806857510
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — Issue #120526 / PR #120979 (Lote 1/2)
+- O que fiz: estendida a interpolação de variáveis de ambiente `${VAR}` (chamando `_interpolate_env_vars` e `_warn_hidden_whitespace`) para plugins de MCP portáteis (`_portable_mcp_servers` em `tools/mcp_tool_config.py`), garantindo que segredos e cabeçalhos em `mcp.json` sejam expandidos dinamicamente a partir do ambiente.
+- Evidência:
+  - Testes: teste unitário em `tests/tools/test_mcp_portable_env.py` verde (1/1 passed).
+  - Push no fork: commit `b57aa87fb0` na branch `fix/120526-interpolate-portable-mcp-env-vars`.
+  - PR: https://github.com/NousResearch/hermes-agent/pull/120979
+  - Comentário no Issue: https://github.com/NousResearch/hermes-agent/issues/120526#issuecomment-5806906161
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — Issue #120510 / PR #120987 (Lote 1/2)
+- O que fiz: ajustado `_on_tool_gen_start` em `hermes_cli/cli_stream_mixin.py` para consultar se a visão de foco está ativa (`self._focus_view_enabled`) ou se `tool_progress_mode == "off"`, suprimindo a emissão da linha de status `preparing <tool>…` no terminal sem deixar de fechar caixas de stream e reasoning abertas.
+- Evidência:
+  - Testes: suites `tests/hermes_cli/test_tool_gen_start_dedupe.py` verde (3/3 passed).
+  - Push no fork: commit `bebdf58d13` na branch `fix/120510-tool-progress-focus-preparing`.
+  - PR: https://github.com/NousResearch/hermes-agent/pull/120987
+  - Comentário no Issue: https://github.com/NousResearch/hermes-agent/issues/120510#issuecomment-5806983734
+- Status: ✅ Concluído e enviado.
+
+- Status Lote 1/2: ✅ 5/5 PRs abertos e comentados nos issues.
+

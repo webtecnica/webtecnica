@@ -47,6 +47,11 @@ Repo: `agent` | `webui` | `deskcomm` | `infra` (playbook/ecossistema)
 2026-09-23 | antigravity | deskcomm | issue #1436 → PR #1555 (crm_find_free_slots tolera dia e dias_a_frente) | #1555 / 2120296 | open
 2026-09-23 | antigravity | deskcomm | issue #1491 → PR #1556 (freio de envio por token antes de abrir conversa e teto org) | #1556 / 74fb9bf | open
 2026-09-23 | antigravity | deskcomm | issue #1246 → PR #1557 (cerca de escrita em organizations com escopo lexico e exports) | #1557 / d680f1a | open
+2026-09-24 | antigravity | agent | issue #120512 → PR #120967 (preservar NODE_EXTRA_CA_CERTS no Bitwarden backend) | #120967 / 42af175 | open
+2026-09-24 | antigravity | agent | issue #120528 → PR #120971 (skill_manage delete nao remove skill essencial/fixada por caminho de categoria) | #120971 / e57135f | open
+2026-09-24 | antigravity | agent | issue #120504 → PR #120974 (cron bash scripts no Windows usam bash nativo/Git bash e ignoram stub WSL bash.exe) | #120974 / a11020b | open
+2026-09-24 | antigravity | agent | issue #120526 → PR #120979 (interpolar env placeholders ${VAR} em plugins portaveis mcp.json) | #120979 / b57aa87 | open
+2026-09-24 | antigravity | agent | issue #120510 → PR #120987 (suprimir linhas preparing tool sob focus view ou tool_progress off) | #120987 / bebdf58 | open
 
 
 
