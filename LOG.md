@@ -394,3 +394,43 @@
 
 - Status Lote 1/2: ✅ 5/5 PRs abertos e comentados nos issues.
 
+### DeskcommCRM — Issue #1361 / PR #1572
+- O que fiz: atualizada a seção de reconciliação de testes do Vitest no `CLAUDE.md` para instruir a leitura de `Failed Suites` antes de diagnosticar a sonda como "cega" (erros de coleta e timeouts de hooks geram linhas FAIL sem incrementar o rodapé de casos), evitando re-execuções pesadas da suíte.
+- Evidência:
+  - Fragmento de release adicionado em `.changes/doutrina-vitest-failed-suites.md`.
+  - Push no fork: commit `ad685d56d` na branch `fix/1361-reconciliacao-vitest-failed-suites`.
+  - PR: https://github.com/melgarafael/DeskcommCRM/pull/1572
+  - Comentário no Issue: https://github.com/melgarafael/DeskcommCRM/issues/1361#issuecomment-5807140844
+- Status: ✅ Concluído e enviado.
+
+### DeskcommCRM — Issue #1113 / PR #1574
+- O que fiz: criado teste de invariante `tests/invariants/configuracao-de-smtp-e-server-side.test.ts` para a tabela singleton `platform_smtp_settings` (da migration 0333), aferindo ausência de privilégios para anon/authenticated, permissão exclusiva para service_role, RLS ativa sem policies públicas, isolamento da senha cifrada via fn_encrypt_oauth/fn_decrypt_oauth e constraint de singleton.
+- Evidência:
+  - `pnpm typecheck` (tsc --noEmit -p tsconfig.typecheck.json): exit 0.
+  - `pnpm lint:channels`: exit 0 (62 arquivos de dívida conhecida, nenhum novo).
+  - Fragmento de release em `.changes/invariante-smtp-server-side.md`.
+  - Push no fork: commit `404dcbda7` na branch `fix/1113-invariante-smtp-settings-server-side`.
+  - PR: https://github.com/melgarafael/DeskcommCRM/pull/1574
+  - Comentário no Issue: https://github.com/melgarafael/DeskcommCRM/issues/1113#issuecomment-5807258028
+- Status: ✅ Concluído e enviado.
+
+### DeskcommCRM — Issue #1488 (Passo 0 / Anti-Duplicata)
+- O que fiz: conferência na base atual revelou que a migration `20260923120100_0386_preco_catalogo_e_conta_openai.sql` (commit `50df9281e`, acompanhamento do #1486 e issue #1490) já atualizou `ai_pricing` e `ai_models` para `gpt-5.6-sol` a 400/2000 centavos por 1M de tokens, com apêndice no `baseline.sql` e teste unitário `tests/unit/preco-openai-codigo-e-tabela-concordam.test.ts` passando 3/3.
+- Evidência:
+  - Teste `tests/unit/preco-openai-codigo-e-tabela-concordam.test.ts` verde (3/3 passed).
+  - Issue comentado liberando a reserva sem PR duplicado: https://github.com/melgarafael/DeskcommCRM/issues/1488#issuecomment-5807272444
+- Status: ✅ Concluído (fechada/liberada sem PR redundante).
+
+### DeskcommCRM — Issue #1313 / PR #1577
+- O que fiz: declarados os limites de retenção em `lib/retencao/politica.ts` para `prospecting_candidates` (30 dias padrão / piso 7 para status='new'; 180 dias padrão / piso 30 para contatados), documentando a proteção dos tokens de supressão (`suppression_*`) e atualizando a matriz de verificação em `tests/unit/retencao-todo-piso-tem-dono.test.ts`.
+- Evidência:
+  - Teste `tests/unit/retencao-todo-piso-tem-dono.test.ts` verde (11/11 passed).
+  - Sabotagem medida (remoção de `PROSPECCAO_NOVOS` causou 1 falha prevista: 1 failed | 9 passed).
+  - `pnpm lint:channels`: exit 0.
+  - Fragmento de release em `.changes/retencao-prospecting-candidates.md`.
+  - Push no fork: commit `60555377d` na branch `fix/1313-retencao-prospecting-candidates`.
+  - PR: https://github.com/melgarafael/DeskcommCRM/pull/1577
+  - Comentário no Issue: https://github.com/melgarafael/DeskcommCRM/issues/1313#issuecomment-5807339265
+- Status: ✅ Concluído e enviado.
+
+
