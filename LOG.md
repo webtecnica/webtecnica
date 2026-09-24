@@ -484,3 +484,30 @@
   - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7292#issuecomment-5824114059
 - Status: ✅ Concluído e enviado.
 
+### hermes-webui — CR PR #7417 (Lote 3/3)
+- O que fiz: atendi os apontamentos de revisão de nesquena-hermes no modo schema de títulos: (1) respostas de schema com apenas raciocínio oculto (`llm_empty_reasoning_aux`) agora continuam para o fallback de compatibilidade com reasoning desativado em vez de abortar prematuramente; (2) saídas truncadas por estouro de tamanho (`finish_reason == 'length'`) preservam o retry com orçamento dobrado em modo schema e, persistindo a falha, caem para o modo de compatibilidade em vez de persistir um fragmento JSON incompleto como título da sessão.
+- Evidência:
+  - Testes: 11/11 passed em `tests/test_title_aux_routing.py` (suíte schema) em 8.01s.
+  - Python compile: 0 erros.
+  - Push no fork: commit `31fd7195` na branch `feat/7413-title-json-schema`.
+  - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7417#issuecomment-5824152454
+- Status: ✅ Concluído e enviado.
+
+### hermes-webui — CR PR #7156 (Lote 3/3)
+- O que fiz: resolvido o defeito visual de duplicação do badge `(default)` quando o perfil default possui `display_name` configurado. Atualizado `static/panels.js` para suprimir `defaultBadge` quando `_profileDisplayLabel(p)` já incluir a identificação canônica entre parênteses, cobrindo tanto os cartões de perfis quanto o dropdown de seleção.
+- Evidência:
+  - Testes: 12/12 passed em `tests/test_issue7151_profile_display_name.py` em 8.79s.
+  - Push no fork: commit `2c727e61` na branch `fix/7151-profile-display-name`.
+  - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7156#issuecomment-5824190100
+- Status: ✅ Concluído e enviado.
+
+### hermes-webui — CR PR #6946 (Lote 3/3)
+- O que fiz: resolvidos os dois apontamentos de revisão de nesquena-hermes: (1) delimitado o escopo de `_providerQualifiedPresetRest()` em `static/ui.js` para exigir estritamente provedor e prefixo `openrouter` e sufixo `@preset/<name>` não-vazio, garantindo que provedores customizados com `@preset/` (como `custom:acme/@preset/blue`) e outros aliases não sofram remoção de prefixo nem desduplicação indevida; (2) unificada a canonicalização da seleção de modelo via `_captureModelDropdownSelection()` em `static/panels.js` em `saveSettings()` e no salvamento de opções avançadas do modelo principal, garantindo o envio do par canônico para `/api/default-model` e `/api/model/set` em vez do valor DOM bruto. Adicionadas regressões.
+- Evidência:
+  - Testes: 7/7 passed em `tests/test_configured_model_picker_provider_routing.py` e `tests/test_issue6946_cross_provider_orphan.py` em 11.13s.
+  - Node check: 0 erros em `static/ui.js` e `static/panels.js`.
+  - Push no fork: commit `da90bc00` na branch `fix/6936-openrouter-preset-model-id`.
+  - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/6946#issuecomment-5824228805
+- Status: ✅ Concluído e enviado.
+
+

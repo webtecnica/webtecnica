@@ -62,6 +62,10 @@ Repo: `agent` | `webui` | `deskcomm` | `infra` (playbook/ecossistema)
 2026-09-24 | antigravity | webui | CR PR #7559 (lote 2/3): identidade composta (session_id, profile) na busca CLI e regressao cross-profile | #7559 / e0beabaf | open
 2026-09-24 | antigravity | webui | CR PR #7399 (lote 2/3): cache estrito profile-scoped live models, guarda de falha obsoleta e docs de arquitetura | #7399 / 84ba014f | open
 2026-09-24 | antigravity | webui | CR PR #7292 (lote 2/3): autoridade uniforme _entryProvider em todas ramificacoes e option top-level preservada | #7292 / c2bc3cbc | open
+2026-09-24 | antigravity | webui | CR PR #7417 (lote 3/3): fallback do schema para reasoning em raciocinio puro e retry de fragmento truncado | #7417 / 31fd7195 | open
+2026-09-24 | antigravity | webui | CR PR #7156 (lote 3/3): supressao de badge (default) duplicado no cartao e dropdown de perfis | #7156 / 2c727e61 | open
+2026-09-24 | antigravity | webui | CR PR #6946 (lote 3/3): escopo estrito OpenRouter em _providerQualifiedPresetRest e canonicalizacao de settings save | #6946 / da90bc00 | open
+
 
 
 
