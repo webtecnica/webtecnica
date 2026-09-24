@@ -56,6 +56,8 @@ Repo: `agent` | `webui` | `deskcomm` | `infra` (playbook/ecossistema)
 2026-09-24 | antigravity | deskcomm | issue #1113 → PR #1574 (invariante configuracao de smtp e server-side only) | #1574 / 404dcbd | open
 2026-09-24 | antigravity | deskcomm | issue #1488 (conferido na base: ja corrigido na 0386 / 50df9281e, liberada sem duplicata) | #1488 | closed
 2026-09-24 | antigravity | deskcomm | issue #1313 → PR #1577 (declarar politica de retencao para candidatos de prospeccao) | #1577 / 6055537 | open
-
+2026-09-24 | antigravity | webui | CR PR #7418 (lote 1/3): correcao pool credential delete com active profile env materialization | #7418 / 40974e4f | open
+2026-09-24 | antigravity | webui | CR PR #7367 (lote 1/3): bare paths com backtick literal preservados em MEDIA_REF_CLASS e wrap backtick suportado | #7367 / d695819d | open
+2026-09-24 | antigravity | webui | CR PR #7284 (lote 1/3): isolamento de tupla em dismiss, post-await fence no poll e settle de live producers | #7284 / 3bb72f0d | open
 
 

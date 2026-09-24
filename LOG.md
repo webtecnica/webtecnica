@@ -433,4 +433,26 @@
   - Comentário no Issue: https://github.com/melgarafael/DeskcommCRM/issues/1313#issuecomment-5807339265
 - Status: ✅ Concluído e enviado.
 
+### hermes-webui — CR PR #7418 (Lote 1/3)
+- O que fiz: corrigida a regressão do teste de deleção de pool de credenciais (`test_delete_credential_pool_credential_removes_from_source_dict_and_disk`), garantindo a materialização do ambiente do perfil nomeado em `_build_provider_env` a partir do `profile_store` e resolvendo falhas de try-imports de mock em `test_issue7391_first_party_edge_tts_engine.py`.
+- Evidência:
+  - Testes: 22/22 passed em `tests/test_provider_delete_credential_pool.py` e `tests/test_issue7391_first_party_edge_tts_engine.py`.
+  - Push no fork: commit `40974e4f` na branch `fix/7412-credential-pool-delete`.
+  - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7418#issuecomment-5823225704
+- Status: ✅ Concluído e enviado.
 
+### hermes-webui — CR PR #7367 (Lote 1/3)
+- O que fiz: restaurado `MEDIA_REF_CLASS = '[^\\s\\)\\]]'` em `static/ui.js` e `static/messages.js` para não truncar caminhos com crases literais (ex. `MEDIA:/tmp/report`final.png`), adicionado suporte explícito para `` `MEDIA:<path>` `` envelopado em crases (em UI renderMd, messages stream tokenizer, `api/media_snapshots.py` e `api/shares.py`), e buffer de caudas de mídia incompletas. Atualizado harness de teste com drift de upstream.
+- Evidência:
+  - Testes: 219 passed, 1 skipped, 18 subtests passed em 4 suítes (`test_media_inline.py`, `test_media_message_snapshots.py`, `test_issue6174_public_share_media_embed.py`, `test_smd_media_in_stream.py`).
+  - Push no fork: commit `d695819d` na branch `fix/7359-media-backtick`.
+  - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7367#issuecomment-5823520512
+- Status: ✅ Concluído e enviado.
+
+### hermes-webui — CR PR #7284 (Lote 1/3)
+- O que fiz: resolvidos os 3 defeitos do review: (1) isolamento de tupla imutável `(run_id, mirror_token, profile)` ao checar, marcar e desmarcar aprovações, eliminando colisões de mesmo ID entre runs distintos; (2) barreira pós-await com `_approvalPollEpoch` no fallback poll, descartando respostas defasadas que chegarem após atualizações do SSE; (3) liquidação fail-close com `_settle_gateway_entry(entry, "deny", "terminal_run_retired")` para produtores ativos em `_gateway_queues` em encerramento terminal de run. Adicionadas 4 novas regressões.
+- Evidência:
+  - Testes: 45/45 passed em `tests/test_issue7242_approval_flyout_dismiss.py` e 24/24 passed em `tests/test_issue4754_approval_dismiss_persist.py` (total 113 passed em testes relacionados de aprovação).
+  - Push no fork: commit `3bb72f0d` na branch `fix/7242-approval-flyout-dismiss`.
+  - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7284#issuecomment-5823735005
+- Status: ✅ Concluído e enviado.
