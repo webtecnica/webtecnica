@@ -550,3 +550,20 @@
   - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7223#issuecomment-5826848754
 - Status: ✅ Concluído e enviado.
 
+### hermes-webui — CR PR #6699
+- O que fiz: atendido o apontamento do mantenedor nesquena-hermes no re-gate do issue #6664 / PR #6699:
+  1. Extraída a inicialização e sincronização da preferência manual de RTL em um helper de produção focado `bindSettingsRtlPreference(settings, rtlCb)` no escopo de módulo em `static/panels.js`, chamado diretamente por `loadSettingsPanel()`. Ele lê a configuração do backend ou `localStorage`, aplica o estado no checkbox `settingsRtl`, alterna a classe `chat-content-rtl` no elemento raiz e amarra o listener de `change` com agendamento de autosave.
+  2. Atualizada a suíte `test_rtl_four_case_behavior_matrix` em `tests/test_persian_locale.py` para extrair e executar `bindSettingsRtlPreference` real de `static/panels.js` no harness do Node em vez de usar `docEl.classList.toggle()` arbitrário de teste.
+  3. Cobertos os 4 cenários comportamentais requisitados mais o disparo dinâmico do listener de evento `change` do checkbox:
+     - Caso 1: Persian (`fa`), manual off (raiz RTL, sem `chat-content-rtl`, checkbox desmarcado, isolamento LTR em blocos de ferramenta).
+     - Caso 2: Persian (`fa`), manual on (raiz RTL, com `chat-content-rtl`, checkbox marcado, isolamento LTR em blocos de ferramenta).
+     - Caso 3: LTR locale (`en`), manual on (raiz LTR, com `chat-content-rtl`, checkbox marcado, isolamento LTR em blocos de ferramenta).
+     - Caso 4: Persian com restauração para LTR manual off (raiz LTR, sem `chat-content-rtl`, checkbox desmarcado, sem vazamento de LTR forçado).
+- Evidência:
+  - Sintaxe Node: 0 erros em `static/panels.js` (`node -c`).
+  - Testes: 11/11 passed em `tests/test_persian_locale.py` em 12.67s.
+  - Regressões adjacentes: 41/41 passed em `tests/test_login_locale_parity.py` e `tests/test_pr1721_rtl_salvage.py` em 17.84s.
+  - Sabotagem: inversão do toggle de classe em `bindSettingsRtlPreference` resultou em falha determinística em `test_rtl_four_case_behavior_matrix`.
+  - Push no fork: commit `a7a46f04` na branch `fix/6664-persian-rtl`.
+  - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/6699#issuecomment-5826963850
+- Status: ✅ Concluído e enviado.
