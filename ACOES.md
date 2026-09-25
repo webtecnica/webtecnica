@@ -73,3 +73,4 @@ Repo: `agent` | `webui` | `deskcomm` | `infra` (playbook/ecossistema)
 2026-09-25 | antigravity | agent | issue #122303 → PR #122314 (add model-substring fallback for kimi reasoning echo) | #122314 / 8560e00 | open
 2026-09-25 | antigravity | agent | issue #122160 → PR #122334 (do not re-exec external entry points and preserve script dir in sys.path) | #122334 / 0ace503 | open
 2026-09-25 | antigravity | webui | CR PR #7022: rebase sob master atendendo mantenedor, resolucao de conflito em upload.py (#6939) | #7022 / 79a5c262 | open
+2026-09-25 | antigravity | agent | issue #122328 → PR #122348 (include missing shipped first-party roots in FIRST_PARTY_MODULE_ROOTS) | #122348 / 38c52e3 | open

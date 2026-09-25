@@ -606,4 +606,16 @@
   - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7022#issuecomment-5827421673
 - Status: ✅ Rebase concluído, enviado e mantenedor re-notificado.
 
+### hermes-agent — Issue #122328 → PR #122348
+- O que fiz: adicionados os 7 módulos/pacotes de primeiro nível faltantes (`batch_runner`, `mcp_serve`, `mini_swe_runner`, `pm`, `registration_lifecycle`, `toolset_distributions`, `trajectory_compressor`) à tupla canônica `FIRST_PARTY_MODULE_ROOTS` em `hermes_constants.py`. Isso restaura o reconhecimento adequado de pacotes internos por utilitários de auditoria de imports, isolamento de venv e empacotamento.
+- Evidência:
+  - Fase RED: 7 falhas determinísticas nos testes de classificação de pacotes em `TestFirstPartyModuleClassification` antes do fix.
+  - Fase GREEN: 75/75 passed em `tests/test_hermes_constants.py` (incluindo 31 testes dedicados em `TestFirstPartyModuleClassification`).
+  - Sabotagem comprovada: remoção de `batch_runner` e `pm` causou imediatamente falhas determinísticas em `test_all_expected_roots_recognized_as_first_party` e `test_first_party_module_roots_completeness`.
+  - Regressões adjacentes: 584/584 passed em `tests/test_audit_old_updater_imports.py` e `tests/test_old_updater_compat_surface.py`.
+  - Push no fork: commit `38c52e3e11` na branch `fix/122328-first-party-module-roots`.
+  - PR aberta: https://github.com/NousResearch/hermes-agent/pull/122348
+  - Comentário na issue: https://github.com/NousResearch/hermes-agent/issues/122328#issuecomment-5827521876
+- Status: ✅ Concluído e enviado.
+
 
