@@ -580,3 +580,17 @@
   - PR aberta: https://github.com/NousResearch/hermes-agent/pull/122314
   - Comentário na issue: https://github.com/NousResearch/hermes-agent/issues/122303#issuecomment-5827113855
 - Status: ✅ Concluído e enviado.
+
+### hermes-agent — Issue #122160 → PR #122334
+- O que fiz: corrigido o disparo indevido de re-execução de processos e workers de sincronização PM (`prepare_launch`) em entry points externos que apenas importam módulos Hermes como biblioteca (ex.: `hermes-webui/server.py`).
+  1. Adicionado helper `is_hermes_entry(project_root, argv)` em `hermes_cli/venv_sync.py` validando se o entry point é launcher conhecido (`hermes`, `hermes-agent`, `hermes-acp`, `tui-gateway`), script interno resolvido dentro do checkout ou invocação via `-m` de módulo Hermes.
+  2. Em `hermes_bootstrap.py`, encapsulado o bloco de `prepare_launch` e `relaunch_command` sob `if is_hermes_entry(_root, sys.argv):`. Para consumidores externos, pula completamente a re-execução e o sync do PM, e degrada silenciosamente caso as dependências do PM não estejam commitadas.
+  3. Em `hermes_cli/venv_sync.py::relaunch_command`, quando um target de script é re-executado, prepende o diretório pai do script em `sys.path` caso seja distinto de `root`, preservando a importação de pacotes irmãos locais (como `api/`).
+- Evidência:
+  - Testes: 38/38 passed em `tests/hermes_cli/test_update_launch_completion.py` e 11/11 em `tests/hermes_cli/test_venv_sync.py`.
+  - Verificação de sabotagem: forçar `if True:` em `hermes_bootstrap.py` resultou em falha determinística `AssertionError: prepare_launch was unexpectedly called!`, provando a eficácia do gate.
+  - Push no fork: commit `0ace5031ce` na branch `fix/122160-bootstrap-external-script-reexec`.
+  - PR aberta: https://github.com/NousResearch/hermes-agent/pull/122334
+  - Comentário na issue: https://github.com/NousResearch/hermes-agent/issues/122160#issuecomment-5827357958
+- Status: ✅ Concluído e enviado.
+

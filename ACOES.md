@@ -71,3 +71,4 @@ Repo: `agent` | `webui` | `deskcomm` | `infra` (playbook/ecossistema)
 2026-09-25 | antigravity | webui | CR PR #7223: snapshot coerente de reasoning na troca de perfil e isolamento de cfg de destino (#7206) | #7223 / ebf04cf2 | open
 2026-09-25 | antigravity | webui | CR PR #6699: extracao e execucao de bindSettingsRtlPreference no teste comportamental de 4 casos (#6664) | #6699 / a7a46f04 | open
 2026-09-25 | antigravity | agent | issue #122303 → PR #122314 (add model-substring fallback for kimi reasoning echo) | #122314 / 8560e00 | open
+2026-09-25 | antigravity | agent | issue #122160 → PR #122334 (do not re-exec external entry points and preserve script dir in sys.path) | #122334 / 0ace503 | open
