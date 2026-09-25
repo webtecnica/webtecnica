@@ -509,5 +509,31 @@
   - Push no fork: commit `da90bc00` na branch `fix/6936-openrouter-preset-model-id`.
   - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/6946#issuecomment-5824228805
 - Status: ✅ Concluído e enviado.
+### hermes-agent — Issue #122222 → PR #122238
+- O que fiz: corrigida a falha de importação de dependências do ambiente Python no external worker do cron em instalações self-managed (`cron/scheduler_worker_env.py`). Agora, quando o worker externo executa com `python -m`, ele reincorpora o `sys.prefix` e o `site-packages` do ambiente ativo ao `PYTHONPATH` antes de spawnar subprocessos ou workers dedicados, prevenindo que jobs agendados falhem antes do ownership ack por falta de dependências instaladas.
+- Evidência:
+  - Testes: 3/3 passed em `tests/cron/test_restart_safe_worker.py` (incluindo teste RED→GREEN e verificação por sabotagem).
+  - Python compile: 0 erros em `cron/scheduler_worker_env.py`.
+  - Push no fork: commit `663403201b` na branch `fix/122222-cron-worker-dependencies`.
+  - PR aberta: https://github.com/NousResearch/hermes-agent/pull/122238
+- Status: ✅ Concluído e enviado.
 
+### DeskcommCRM — Issue #1608 → PR #1636
+- O que fiz: implementada a liberação de leitura segura de dados externos (`crm_describe_external_data` e `crm_query_external_data`) no Modo Teste do agente em `lib/agent-engine/agent/preview.ts`. As ferramentas foram adicionadas ao conjunto `SCENARIO_READS`, permitindo ao usuário testar consultas no banco conectado em modo preview com a mesma segurança estrita contra escritas. Criado changeset `.changes/dados-externos-modo-teste-agente.md`.
+- Evidência:
+  - Testes: 3/3 passed em `tests/unit/preview-scenario-reads-security.test.ts` (vitest RED→GREEN e sabotagem).
+  - Typecheck: 0 erros com `tsc --noEmit -p tsconfig.typecheck.json` (com 4GB heap).
+  - Lint: 0 erros com `pnpm lint:channels`.
+  - Claim no issue: https://github.com/melgarafael/DeskcommCRM/issues/1608#issuecomment-5826446707
+  - Push no fork: commit `e4e585d8b` na branch `fix/1608-preview-dados-externos`.
+  - PR aberta: https://github.com/melgarafael/DeskcommCRM/pull/1636
+- Status: ✅ Concluído e enviado.
 
+### hermes-agent — Issue #122239 → PR #122265
+- O que fiz: corrigido `hermes_cli/version_info.py` onde `_run_git()` e a verificação de status dirty chamavam `subprocess.run(capture_output=True, text=True)` sem especificar codificação, causando `UnicodeDecodeError` em ambientes Windows com locale non-UTF-8 (como cp936). Agora decodifica explicitamente com `encoding="utf-8", errors="replace"`.
+- Evidência:
+  - Testes: 15/15 passed em `tests/hermes_cli/test_version_info.py` (RED→GREEN e sabotagem).
+  - Python compile: 0 erros em `hermes_cli/version_info.py`.
+  - Push no fork: commit `602d93f95f` na branch `fix/122239-version-info-git-encoding`.
+  - PR aberta: https://github.com/NousResearch/hermes-agent/pull/122265
+- Status: ✅ Concluído e enviado.
