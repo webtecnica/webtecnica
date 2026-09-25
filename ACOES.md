@@ -68,4 +68,4 @@ Repo: `agent` | `webui` | `deskcomm` | `infra` (playbook/ecossistema)
 2026-09-25 | antigravity | agent | issue #122222 → PR #122238 (cron external worker cannot import dependencies on self-managed installs) | #122238 / 6634032 | open
 2026-09-25 | antigravity | deskcomm | issue #1608 → PR #1636 (modo teste do agente: permitir buscar dados no banco conectado) | #1636 / e4e585d | open
 2026-09-25 | antigravity | agent | issue #122239 → PR #122265 (version_info _run_git decodes with utf-8 replace on cp936 locale) | #122265 / 602d93f | open
-
+2026-09-25 | antigravity | webui | CR PR #7223: snapshot coerente de reasoning na troca de perfil e isolamento de cfg de destino (#7206) | #7223 / ebf04cf2 | open

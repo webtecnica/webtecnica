@@ -527,8 +527,6 @@
   - Claim no issue: https://github.com/melgarafael/DeskcommCRM/issues/1608#issuecomment-5826446707
   - Push no fork: commit `e4e585d8b` na branch `fix/1608-preview-dados-externos`.
   - PR aberta: https://github.com/melgarafael/DeskcommCRM/pull/1636
-- Status: ✅ Concluído e enviado.
-
 ### hermes-agent — Issue #122239 → PR #122265
 - O que fiz: corrigido `hermes_cli/version_info.py` onde `_run_git()` e a verificação de status dirty chamavam `subprocess.run(capture_output=True, text=True)` sem especificar codificação, causando `UnicodeDecodeError` em ambientes Windows com locale non-UTF-8 (como cp936). Agora decodifica explicitamente com `encoding="utf-8", errors="replace"`.
 - Evidência:
@@ -537,3 +535,18 @@
   - Push no fork: commit `602d93f95f` na branch `fix/122239-version-info-git-encoding`.
   - PR aberta: https://github.com/NousResearch/hermes-agent/pull/122265
 - Status: ✅ Concluído e enviado.
+
+### hermes-webui — CR PR #7223
+- O que fiz: atendidos os 3 apontamentos de revisão de nesquena-hermes no re-gate do issue #7206 / PR #7223:
+  1. Isolada a resolução de capacidades de modelo/provedor do `cfg` global em `api/config.py`: adicionado parâmetro `config_data` a `_resolve_model_reasoning_efforts_impl`, `resolve_model_reasoning_efforts` e `coerce_reasoning_effort_for_model`, fazendo com que a troca de perfil consulte exclusivamente o config do perfil de destino (`target_cfg`) e não o `cfg` global do perfil anterior.
+  2. Atualizados os chamadores `switchToProfile` (`static/panels.js`) e `_switchProfileForSessionLoad` (`static/sessions.js`) para repassarem o objeto completo validado `data.reasoning`, permitindo que `refreshProfileTransitionReasoningChip` renderize síncrona e imediatamente o snapshot coerente de esforço, escada de esforços suportados e toggle de thinking no chip de reasoning, sem tela em branco ou dependência de esperar o GET de rede.
+  3. Corrigido o tratamento de fallback para `reasoning: null`: quando o switch não fornece status válido, nenhum override impede o GET subsequente de atualizar o estado de esforço; e em caso de falha transitória do GET subsequente após um seed válido, o snapshot de destino é preservado.
+- Evidência:
+  - Testes: 19/19 passed em `tests/test_profile_switch_1200.py` em 19.50s.
+  - Verificação de sabotagem: novo teste `test_switch_profile_reasoning_uses_destination_provider_capabilities` falhou deterministamente com `['low'] != ['high']` sob vazamento de cfg global e passou sob resolução isolada.
+  - Node syntax check: 0 erros em `static/ui.js`, `static/panels.js` e `static/sessions.js`.
+  - Python compile: 0 erros em `api/config.py` e `api/profiles.py`.
+  - Push no fork: commit `ebf04cf2` na branch `fix/7206-issue`.
+  - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7223#issuecomment-5826848754
+- Status: ✅ Concluído e enviado.
+
