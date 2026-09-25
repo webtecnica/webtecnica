@@ -594,3 +594,16 @@
   - Comentário na issue: https://github.com/NousResearch/hermes-agent/issues/122160#issuecomment-5827357958
 - Status: ✅ Concluído e enviado.
 
+### hermes-webui — CR PR #7022
+- O que fiz: atendido o pedido explícito do mantenedor @nesquena-hermes no PR #7022 ("Needs a rebase from you — status update, not a review verdict"):
+  1. Rebase da branch `fix/6939-attachment-docker-paths` sobre o `upstream/master` atual (291 commits à frente).
+  2. Resolução do conflito em `api/upload.py`, preservando tanto a nova assinatura de master `_upload_destination(session_id, safe_name, dest_dir=None)` quanto os helpers de staging sandbox de container (`_remote_terminal_backend_active`, `_terminal_backend_name`, `_sandbox_attachment_root`, `_agent_visible_attachment_path`).
+  3. Re-execução e validação de 100% dos testes da suíte de upload e caminhos docker.
+- Evidência:
+  - Testes: 31/31 passed em `tests/test_issue6939_attachment_docker_paths.py` e `tests/test_chat_upload_attachment_paths.py`.
+  - 60/60 passed em `tests/test_file_manager_external_session.py` e testes de anexo sem symlink nativo Windows.
+  - Push no fork: commit `79a5c262` na branch `fix/6939-attachment-docker-paths`.
+  - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7022#issuecomment-5827421673
+- Status: ✅ Rebase concluído, enviado e mantenedor re-notificado.
+
+
