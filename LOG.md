@@ -618,4 +618,20 @@
   - Comentário na issue: https://github.com/NousResearch/hermes-agent/issues/122328#issuecomment-5827521876
 - Status: ✅ Concluído e enviado.
 
+### hermes-agent — Issue #122349 → PR #122359
+- O que fiz: corrigido o loop infinito de rebuild/re-execução e sincronização de venv (`prepare_launch` / `venv_is_current`) causado por mutação de estado de runtime (bancos SQLite, metadados de watermark, arquivos de fila de tarefas, logs) em pastas de membros de plugins:
+  1. Suporte completo a `.gitignore` e `.hermesignore` na hierarquia de pastas de membros, respeitando regras de ancoragem, negações (`!`), pastas (`/`) e padrões glob.
+  2. Suporte a diretivas de exclusão do `MANIFEST.in` (`exclude`, `prune`, `global-exclude`) e configuração `[tool.hermes.build] exclude` de `pyproject.toml`.
+  3. Adição de artefatos de runtime e caches de teste comuns às exclusões padrão (`_MEMBER_EXCLUDE` e `_DEFAULT_SUFFIX_EXCLUDES`: `.pytest_cache`, `.mypy_cache`, `.ruff_cache`, `.coverage`, `.tox`, `.nox`, `.DS_Store`, `Thumbs.db`, `.pyc`, `.pyo`, `.pyd`, e arquivos de banco/log `.db`, `.sqlite`, `.sqlite3`, `.db-wal`, `.db-shm`, `.db-journal`, `.log`).
+  4. Garantido que `_workspace_member()` não copia artefatos de runtime ignorados para `plugin-sources/` na geração.
+- Evidência:
+  - Fase RED: `test_member_stamp_and_workspace_ignore_runtime_and_gitignored_files` em `tests/pm/test_workspace_build_inputs.py` falhou deterministicamente (`AssertionError: assert '1369bcd3... != 'dc975bdb...'`) antes do fix.
+  - Fase GREEN: 7/7 passed em `tests/pm/test_workspace_build_inputs.py` e 6/6 passed em `tests/pm/test_workspace.py`.
+  - Sabotagem comprovada: reversão temporária de `_member_ignored` reproduziu imediatamente a falha determinística (`AssertionError: assert '4d5ce661... != '6af0a3d8...'`), confirmando a eficácia do gate.
+  - Ruff scoped: 0 erros.
+  - Push no fork: commit `0268a4798c` na branch `fix/122349-plugin-member-runtime-state-stamp`.
+  - PR aberta: https://github.com/NousResearch/hermes-agent/pull/122359
+  - Comentário na issue: https://github.com/NousResearch/hermes-agent/issues/122349#issuecomment-5827715281
+- Status: ✅ Concluído e enviado.
+
 
