@@ -109,6 +109,16 @@ git log --format='%an <%ae>' upstream/main..HEAD | sort -u   # tem que ser só w
    nunca da main do fork e nunca de outra branch nossa.
 2. **Nunca rebase de commit publicado, nunca `push --force` na base, nunca push em `main`/`master`.**
    Branch atrasada se atualiza com `git merge upstream/<base>` (no Deskcomm é regra escrita do repo).
+   **Force-push só em branch comprovadamente 100% nossa** — antes de qualquer `--force` (mesmo
+   `--force-with-lease`): `git fetch origin <branch>` e conferir
+   `git log --oneline HEAD..origin/<branch>` + `git log --format='%an' origin/<branch> | sort -u`.
+   Qualquer commit que não seja nosso ⇒ ABORTAR o force e seguir com **commit novo ou `git pull`**.
+   O lease NÃO protege: ele apaga sem pestanejar tudo que já estava no remote no momento do push.
+   Em branch de PR onde o mantenedor já commitou, force é proibido para sempre — ele pediu por
+   escrito (25/09, PR do Deskcomm #1651, após perdermos 2 commits dele num rebase pushado).
+   E renumeração de migration só pode reescrever NOSSAS referências: `git diff upstream/<base> --
+   supabase/` tem de mostrar só adições nossas (troca às cegas renomeou o 0412 da main e trocou
+   comentários do baseline). Detalhe medido: APRENDIZADO 2026-09-25.
 3. **Nunca `gh pr merge`** — não temos permissão de merge em nenhum dos 3; quem mergeia é o mantenedor.
 4. **Zero PR inferior/duplicata:** passo 0 (§5) é obrigatório; se o fix já existe na base, comente na
    issue apontando o PR/sha e feche o trabalho — não abra PR.

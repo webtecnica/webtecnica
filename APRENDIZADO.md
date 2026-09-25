@@ -67,3 +67,26 @@
 - Incidente 1 (timeout): filho do #7098 preso 420s+ num pytest --collect-only -> timeout 2700s com diff parcial nao commitado; arremate despachado COM o estado medido no brief.
 - Incidente 2 (filtro de seguranca da Xiaomi): arremate barrado com "high risk" ao redigir o RESUMO FINAL — mas commit (ccb23d1d), push e comentario no PR ja estavam feitos. Mensagem de "failed" nao e trabalho perdido: medir o disco/remote antes de reagir (state-in-git pagou 100%). Regra mantida: reportar, NUNCA trocar filho de modelo/provider.
 - Reconciliacao VPS x PC (o ledger expoz em tempo real): o Antigravity rodou lote de 8 PRs webui em paralelo; #7647 = colaboracao provada por ancestry (nosso 5c1b1dea e ancestral do i18n d2ecf3d7 dele — findings 1+2 nossos, finding 4 dele); #7651/#7743 = heads nossos apesar do LOG dele reivindicar — ACOES.md existe justamente para separar feito x declarado.
+
+## 2026-09-25
+
+### 🚨 Force-push na branch do PR apagou 2 commits do mantenedor (Deskcomm #1651) — pedido explícito dele
+- **Incidente:** o rebase da VPS (renumeração da migration do provedor custom 0412→0413) foi
+  pushado com `--force-with-lease` 2 minutos depois de o mantenedor ter pushado 2 commits NA
+  NOSSA branch do PR — os 2 commits dele foram apagados. Ele refiz em cima do nosso head novo
+  (935f4af) só com commits novos, sem force; os nossos 7 commits continuam como estavam.
+- **Pedido do mantenedor, vale para sempre:** "daqui para a frente, não use force-push nesta
+  branch. Se precisar mudar algo, faça commit novo ou git pull antes. Assim o trabalho dos dois
+  lados não se perde."
+- **Por que o lease não salvou:** `--force-with-lease` só protege contra mudança CONCORRENTE
+  depois do nosso fetch; commits alheios já existentes no remote são apagados conscientemente.
+  A checagem correta é por commit e autoria, ANTES do force:
+  `git fetch origin <branch> && git log --oneline HEAD..origin/<branch>` (tem commit de terceiro? ⇒ aborta).
+- **Efeito colateral do rebase às cegas:** a troca 0412→0413 reescreveu também o 0412 da main
+  (birthdate do #1546): linha do MANIFEST apontando para migration inexistente em disco + 3
+  comentários do baseline.sql trocados. Renumeração só pode tocar referências NOSSAS — conferência
+  obrigatória: `git diff upstream/<base> -- supabase/` deve mostrar só adições nossas.
+- **Achado que virou bug nosso (corrigido por ele):** a rota `/revalidate` chamava o validador
+  sem `base_url` → para provider `custom` respondia `base_url_ausente` e o botão Revalidar
+  derrubava credencial que funciona. Todo chamador novo do validador precisa receber o endereço gravado.
+- Destilado no PLAYBOOK §3, regra 2 (inspeção pré-force obrigatória + banido em branch com commit dele).
