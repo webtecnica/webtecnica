@@ -526,7 +526,8 @@
   - Lint: 0 erros com `pnpm lint:channels`.
   - Claim no issue: https://github.com/melgarafael/DeskcommCRM/issues/1608#issuecomment-5826446707
   - Push no fork: commit `e4e585d8b` na branch `fix/1608-preview-dados-externos`.
-  - PR aberta: https://github.com/melgarafael/DeskcommCRM/pull/1636
+  - PR aberta e mesclada: https://github.com/melgarafael/DeskcommCRM/pull/1636
+- Status: ✅ Concluído e MERGED por @melgarafael.
 ### hermes-agent — Issue #122239 → PR #122265
 - O que fiz: corrigido `hermes_cli/version_info.py` onde `_run_git()` e a verificação de status dirty chamavam `subprocess.run(capture_output=True, text=True)` sem especificar codificação, causando `UnicodeDecodeError` em ambientes Windows com locale non-UTF-8 (como cp936). Agora decodifica explicitamente com `encoding="utf-8", errors="replace"`.
 - Evidência:
@@ -566,4 +567,16 @@
   - Sabotagem: inversão do toggle de classe em `bindSettingsRtlPreference` resultou em falha determinística em `test_rtl_four_case_behavior_matrix`.
   - Push no fork: commit `a7a46f04` na branch `fix/6664-persian-rtl`.
   - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/6699#issuecomment-5826963850
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — Issue #122303 → PR #122314
+- O que fiz: adicionado fallback de substring de modelo `("kimi", "moonshot")` para a regra de eco de raciocínio da família `kimi` em `_REASONING_ECHO_RULES` (`agent/message_sanitization.py`). Modelos da família Kimi (ex.: `moonshotai/kimi-k3` ou `kimi-k2.5`) roteados via agregadores (como OpenRouter) anteriormente não casavam com nenhuma família devido à tupla de substrings vazia `()`, fazendo com que `reasoning_content` fosse expurgado de turnos de assistente e quebrando a continuidade de raciocínio em sessões multi-turno.
+- Evidência:
+  - Fase RED comprovada: 3 falhas determinísticas em `TestReasoningEchoFamily.test_table` antes do fix.
+  - Fase GREEN: 51/51 passed em `tests/agent/test_message_sanitization_policy.py` em 8.38s.
+  - Sabotagem comprovada: substituição das substrings por tupla inválida resultou nas exatas 3 falhas previstas; restauração resultou em 51/51 passed.
+  - Regressões adjacentes: 70/70 passed em `tests/hermes_cli/test_reasoning_command.py` e `tests/agent/test_message_sanitization_policy.py` em 13.36s.
+  - Push no fork: commit `8560e00d22` na branch `fix/122303-kimi-reasoning-echo-model-fallback`.
+  - PR aberta: https://github.com/NousResearch/hermes-agent/pull/122314
+  - Comentário na issue: https://github.com/NousResearch/hermes-agent/issues/122303#issuecomment-5827113855
 - Status: ✅ Concluído e enviado.

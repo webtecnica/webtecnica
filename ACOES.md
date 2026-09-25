@@ -66,7 +66,8 @@ Repo: `agent` | `webui` | `deskcomm` | `infra` (playbook/ecossistema)
 2026-09-24 | antigravity | webui | CR PR #7156 (lote 3/3): supressao de badge (default) duplicado no cartao e dropdown de perfis | #7156 / 2c727e61 | open
 2026-09-24 | antigravity | webui | CR PR #6946 (lote 3/3): escopo estrito OpenRouter em _providerQualifiedPresetRest e canonicalizacao de settings save | #6946 / da90bc00 | open
 2026-09-25 | antigravity | agent | issue #122222 → PR #122238 (cron external worker cannot import dependencies on self-managed installs) | #122238 / 6634032 | open
-2026-09-25 | antigravity | deskcomm | issue #1608 → PR #1636 (modo teste do agente: permitir buscar dados no banco conectado) | #1636 / e4e585d | open
+2026-09-25 | antigravity | deskcomm | issue #1608 → PR #1636 (modo teste do agente: permitir buscar dados no banco conectado) | #1636 / e4e585d | merged
 2026-09-25 | antigravity | agent | issue #122239 → PR #122265 (version_info _run_git decodes with utf-8 replace on cp936 locale) | #122265 / 602d93f | open
 2026-09-25 | antigravity | webui | CR PR #7223: snapshot coerente de reasoning na troca de perfil e isolamento de cfg de destino (#7206) | #7223 / ebf04cf2 | open
 2026-09-25 | antigravity | webui | CR PR #6699: extracao e execucao de bindSettingsRtlPreference no teste comportamental de 4 casos (#6664) | #6699 / a7a46f04 | open
+2026-09-25 | antigravity | agent | issue #122303 → PR #122314 (add model-substring fallback for kimi reasoning echo) | #122314 / 8560e00 | open
