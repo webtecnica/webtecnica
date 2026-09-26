@@ -133,3 +133,8 @@
   pedir "issues livres" exige varredura NOVA (sem estado) com as mesmas regras do protocolo —
   sem claim, sem assignee, sem label de bloqueio, sem PR cruzado. Em 25/09 a varredura achou
   11 livres enquanto o watchdog dizia "nada novo".
+
+### Pesquisa de infra (salva, nada instalado)
+- [`pesquisas/2026-09-25-supabase-vps-vs-cloud.md`](pesquisas/2026-09-25-supabase-vps-vs-cloud.md)
+  — self-host na VPS × Supabase cloud free, todas as especificações (kit + Supabase + limites do free).
+  Nada instalado; só pesquisa, salva para quando decidirmos subir o CRM numa VPS igual a esta.
