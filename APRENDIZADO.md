@@ -184,3 +184,10 @@
 - O roteiro numerado que o filho deixou (`commits.sh`: espera gate → sabotagem → push → PR →
   crédito → comentário) rodou inteiro no pai — exigir esse artefato no brief quando o filho
   estourar teto.
+- **CI vermelha pós-merge (#1683): as CERCAS da main não estão no brief do filho.** O filho
+  entrega `typecheck` verde e a CI reprova em i18n/espanhol (12 t() sem es), `rotulo-do-contato`
+  (fallback de nome feito à mão → usar `nomeDoContato`) e `vocabulario.test` (enum de wire sem
+  mapa → exportar mapa em `lib/followup/vocabulario.ts`). Regra: depois de TDOO merge de
+  upstream, rodar local as 3 cercas antes do push; traduções novas = uma linha em
+  `lib/i18n/dicionario.ts` no formato `"pt": { es: "..." }`. E o depend novo que a main trouxe
+  exige `pnpm install` antes do typecheck (`@types/jsdom` mascarou como erro nosso).
