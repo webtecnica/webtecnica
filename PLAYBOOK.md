@@ -137,6 +137,12 @@ git log --format='%an <%ae>' upstream/main..HEAD | sort -u   # tem que ser só w
 10. **PR parcial = DRAFT + `Refs #N`** — nunca `Closes` pela metade (fecharia a issue incompleta);
     perguntas de produto que a issue abriu vão como comentário na issue, e o PR espera as
     respostas (validado 25/09 na #1639 → PR #1672).
+11. **CR/revisão do mantenedor: ler INTEIRO e separar** — *"é com você"* (nosso desenho →
+    codar e **responder decidindo** a pergunta de desenho, ex.: "1 PR só") × *"é conosco"*
+    (carimbo, fragmento, i18n alheia → confirmar e não mexer) × frases que dispensam ação
+    ("você não precisa fazer nada"). E antes de reportar qualquer entrega, **provar os claims
+    do próprio resumo** (grep no branch por cada tela/módulo citado): PR verde não valida
+    conteúdo (medido 26/09: resumo dizia "editor criado" e o arquivo tinha 0 ocorrências).
 
 ---
 

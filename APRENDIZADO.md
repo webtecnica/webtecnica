@@ -138,3 +138,24 @@
 - [`pesquisas/2026-09-25-supabase-vps-vs-cloud.md`](pesquisas/2026-09-25-supabase-vps-vs-cloud.md)
   — self-host na VPS × Supabase cloud free, todas as especificações (kit + Supabase + limites do free).
   Nada instalado; só pesquisa, salva para quando decidirmos subir o CRM numa VPS igual a esta.
+## 2026-09-26
+
+### Lote das 8 propostas 💡 — 3 entregas + revisão do mantenedor em 5 blocos (#1683/#1684/#1688)
+- Reservas ("Pego esta") ×8, pré-voo serializado do pai, gate de seed em BATCH (1 request p/ 3
+  seeds, rc por score) e onda de 3: as 3 primeiras issues saíram como PRs em ~1h44 de filho cada
+  (todos com sabotagem medida e gates pela lane única).
+- **A revisão longa do mantenedor tem 5 blocos**: leitura → "O que medi (head X)" → "O que NÃO
+  medi" → **"O que falta, é com você"** (lista numerada do nosso desenho; ele não mexe por
+  princípio) → **"o que é conosco"** (ele faz na nossa branch, com nosso nome). Fecha oferecendo
+  dividir o PR. Resposta que funcionou: aceitar os itens, **decidir a pergunta de desenho**
+  (1 PR só), confirmar a divisão de papéis e despachar com fix-spec medida.
+- 🔴 **Auto-relato de filho não é prova**: o resumo disse "editor criado" e a branch tinha
+  **0 ocorrências** — o mantenedor mediu antes. PR OPEN+MERGEABLE+`Closes` prova ESTADO, não
+  CONTEúdo; claim de artefato alto nível (tela/módulo/endpoint) exige grep no branch antes de
+  reportar a alguém.
+- **Colisão de migration com PR irmão do MESMO lote**: o checker conta PRs abertos — dois filhos
+  mediram "próximo livre" antes de um empurrar o outro (0416×0416, e 0419×PR irmão); doutrina da
+  casa: quem entra primeiro fica, o outro renumera NNNN+timestamp juntos. Verificar contra os PRs
+  do próprio lote, não só contra a main.
+- **Filho TRUNCATED (max_iterations) com PR completo e 1 pendência de um comando** → o pai
+  executa a pendência no mesmo turno (comentário na issue) — não re-dispara.
