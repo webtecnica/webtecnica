@@ -202,3 +202,14 @@
   sem nenhuma falha de i18n/rotulo/vocabulario na CI; e o filho do #1695 DETECTOU a corrida
   de 0426 sozinho e renumerou p/ **0428** antes do push (report desatualizado falou 0426 —
   o REMOTO mandou: sempre ler o NNNN do `gh pr diff`, nunca do resumo do filho).
+
+- **OpenCode Zen/Go (26/09, credencial `oc_sk_` salva via console automatizado):** 3 armadilhas
+  — (1) tier FREE do Zen (`mimo-v2.6-flash-free`, `jev-1.13-free`…) devolve **403 "only from
+  within OpenCode"** para qualquer cliente externo; (2) Zen pago sem saldo = "Insufficient
+  account funds" (créditos do usuário estavam no **Go**); (3) endpoint Go (`/zen/go/v1`)
+  exige o header **`x-opencode-session`** — o Hermes tem suporte NATIVO
+  (`agent/opencode_affinity.py`) e o provider embutido `opencode-go` já manda. Mesma chave
+  vale pros dois endpoints. Login do console por e-mail senha; Google OAuth BLOQUEIA de
+  datacenter ("browser may not be secure") — fluxo email + Playwright headless funcionou.
+  Config final: main+delegation `opencode-go/mimo-v2.6-flash`, fallback do principal =
+  [xiaomi, deepseek], delegation sem fallback; `.env HERMES_INFERENCE_MODEL` vence config.
