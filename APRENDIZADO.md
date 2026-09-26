@@ -197,3 +197,8 @@
   cada filho do lote** (0426, 0427, 0428…), em vez de deixar cada um medir. Correção aplicada:
   quem entrou primeiro fica (#1715 = 0426), o outro renumera NNNN+timestamp juntos +
   comentário no `baseline.sql` → checker passou a apontar 0428, os dois PRs MERGEABLE.
+
+- **Onda 4 (3/3 verde) validou as regras salvas hoje**: cercas no brief → #1718/#1719/#1720
+  sem nenhuma falha de i18n/rotulo/vocabulario na CI; e o filho do #1695 DETECTOU a corrida
+  de 0426 sozinho e renumerou p/ **0428** antes do push (report desatualizado falou 0426 —
+  o REMOTO mandou: sempre ler o NNNN do `gh pr diff`, nunca do resumo do filho).
