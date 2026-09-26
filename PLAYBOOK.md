@@ -129,6 +129,14 @@ git log --format='%an <%ae>' upstream/main..HEAD | sort -u   # tem que ser só w
 7. **Idioma:** agent/webui → EN (corpo de PR, comentários, mensagens de commit). Deskcomm → PT-BR
    em tudo (comentários, docs, corpo de PR; só o prefixo do commit é o conventional em EN).
 8. **Um PR = uma issue = um escopo.** Escopo de epic/feature grande vira issue primeiro.
+9. 🔴 **SEMPRE sincronizar com este repositório** — `git pull --rebase origin main` ao ABRIR
+   qualquer sessão de trabalho e `git push` ao FECHAR (LOG com status) e SEMPRE que houver
+   aprendizado novo: lição commitada no MESMO dia, em `APRENDIZADO.md` (ou destilada aqui).
+   O que não foi pushado não existe para o outro lado — conhecimento que fica só na conversa
+   se perde quando a sessão acaba.
+10. **PR parcial = DRAFT + `Refs #N`** — nunca `Closes` pela metade (fecharia a issue incompleta);
+    perguntas de produto que a issue abriu vão como comentário na issue, e o PR espera as
+    respostas (validado 25/09 na #1639 → PR #1672).
 
 ---
 

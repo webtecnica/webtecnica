@@ -90,3 +90,46 @@
   sem `base_url` → para provider `custom` respondia `base_url_ausente` e o botão Revalidar
   derrubava credencial que funciona. Todo chamador novo do validador precisa receber o endereço gravado.
 - Destilado no PLAYBOOK §3, regra 2 (inspeção pré-force obrigatória + banido em branch com commit dele).
+
+### Carga na VPS (load 11) — 4 causas medidas e as correções que ficaram
+- Pico de load 11 com CPU 96% ociosa e iowait 0 = espera de LOCK/FORK, não falta de CPU:
+  3 clones paralelos do mesmo repo (0,5–1,6G cada) + 2 `pnpm install` no MESMO store +
+  `typecheck` rodado FORA da lane única. Correção: **pré-voo do pai serializado** (clone+install
+  ANTES do fan-out; filho não clona nem instala nem roda gate direto — só via fila).
+- Heap fixo do worker (3072) derrubava o `tsc` do repo com rc=134 (SIGABRT) → filho RE-RODava o
+  gate inteiro = trabalho pesado em dobro. Correção: default do worker subido (5120).
+- Sem histórico de carga na máquina → instalado `sysstat` (coleta ativa) para forense futura.
+- Estado órfão de job (`.state=running` com unit morto) enganava o status — limpar.
+
+### 🔴 Gate VERDE FALSO — "o log mentiu"
+- Job cujo comando usa binário ausente (`npx` não existe no PATH do worker) fecha `exit=0` com
+  `command not found` e o marcador final VAZIO — rc do `bash -lc` é do último comando, não do
+  que falhou. Antes de citar qualquer gate verde: `grep -c 'command not found' <log>` +
+  conferir presença do marcador (`GATES_OK`/`exit=0` da etapa). Encontrado 2 vezes no mesmo dia
+  (gates do #1642 e do #1660 deram "verde" sem nunca terem rodado o teste).
+
+### Corrida de migration entre 2 PRs NOSSOS (0416 × 0416)
+- Dois filhos mediram "próximo livre" antes de um empurrar o outro → mesmíssimo NNNN em 2 PRs.
+  O checker da casa (`pnpm checar:colisao-de-migration`) avisa e dá a doutrina: **"quem entrar
+  primeiro fica, e o outro renumera (NNNN e timestamp juntos)"**. Verificação cruzada: puxar a
+  branch do irmão e rodar o checker ANTES de esperar o mantenedor notar. Renumeração = renomear
+  arquivo + linha do MANIFEST + corpo do PR + re-rodar checker/cercas/test:shell + push normal.
+
+### Corte de saldo/provider no MEIO da onda (HTTP 402) — recuperação sem perda
+- Filho morre com 402 mas o **worktree preserva tudo** (árvore suja, commits, gates já medidos).
+  Protocolo: (1) trocar provider/config e provar com sonda (filho-probe confirma o modelo novo);
+  (2) PARAR os filhos ainda vivos no provider morto (steer não funciona — sem modelo não há
+  raciocínio); (3) re-despachar 1:1 como "continue from partial" com o ESTADO MEDIDO no brief
+  (arquivos, jobs de gate, o que falta); (4) reverter o provider depois, com cron one-shot de
+  segurança caso a sessão caia. 3 cortes, 0 trabalhos perdidos.
+
+### Revisão do mantenedor sem CR = NÃO agir
+- Comentário do mantenedor do tipo "você não precisa fazer nada" (ele mesmo pushou os ajustes na
+  nossa branch, ou ligou auto-merge) não é CR: ler INTEIRO, confirmar o que ele pushou
+  (`git log origin/<branch>`) e ficar quieto — reagir de mais cria ruído em review alheio.
+
+### Watchdog de reserva deduplica — varredura independente para "livres"
+- O script de alerta de issues silencia para o que já foi alertado uma vez (estado de 30 dias):
+  pedir "issues livres" exige varredura NOVA (sem estado) com as mesmas regras do protocolo —
+  sem claim, sem assignee, sem label de bloqueio, sem PR cruzado. Em 25/09 a varredura achou
+  11 livres enquanto o watchdog dizia "nada novo".
