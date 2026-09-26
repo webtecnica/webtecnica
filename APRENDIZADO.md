@@ -159,3 +159,28 @@
   do próprio lote, não só contra a main.
 - **Filho TRUNCATED (max_iterations) com PR completo e 1 pendência de um comando** → o pai
   executa a pendência no mesmo turno (comentário na issue) — não re-dispara.
+
+### Conflito de DUAS LEIS na mesma branch — #1712 × o #1688 que mergeou no meio do lote
+- O mantenedor mergeou o nosso #1688 (campos exigidos) enquanto a branch seguinte (#1538)
+  já tocava os MESMOS 7 arquivos → CONFLICTING real. Primeiro erro: medi contra `origin/main`
+  — aqui `origin` é o FORK (main velha), medição inócua; o certo é `upstream/main`.
+- Resolução = **união das duas leis**: 409 de reabertura (estado) ANTES do 422 de campos
+  (conteúdo), nunca um no lugar do outro. 12 marcadores, 3 ciclos de gate até verde.
+- Armadilhas pagas do resolver: (a) lados A/B podem ser RABOS de um `import {` comum —
+  concat vira sintaxe quebrada, precisa reinserir o `import {`; (b) classificar região por
+  palavra-chave exige chave EXCLUSIVA (`.select(` e `MODO_REABERTURA_PADRAO` existiam nos
+  DOIS lados e mandaram o handler errado — um bloco inteiro foi sobrescrito); (c)
+  `git checkout -m` refaz os marcadores mas APAGA consertos já feitos naquele arquivo.
+- **União semântica em teste**: dois blocos `if (tabela === "crm_pipelines")` = o PRIMEIRO
+  vence → a pergunta de 409 saía como 200; fundir num bloco só com união de payload. E a
+  fake de builder precisa de `.in` E `then` — `await` de não-thenable devolve o próprio
+  builder e o `.map` explode depois.
+- **Escada de verificação do merge**: marcadores 0 → typecheck (cobre `tests/`) → eslint nos
+  tocados → TODOS os testes do caminho (`grep -rl "<rota>" tests`) → commit (o pré-commit já
+  checa colisão de migration) → push → readback MERGEABLE. Erros em cascata: consertar a RAIZ
+  (import/chave faltando) e re-rodar — nunca caçar o último erro da lista.
+- 🔴 `cmd | tail; echo $?` mascarou o rc do script **2× no mesmo dia** (pré-voo e arremate
+  do filho) — rc se captura SEM pipe (`; rc=$?` antes de qualquer redirecionamento).
+- O roteiro numerado que o filho deixou (`commits.sh`: espera gate → sabotagem → push → PR →
+  crédito → comentário) rodou inteiro no pai — exigir esse artefato no brief quando o filho
+  estourar teto.

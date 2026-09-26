@@ -143,6 +143,12 @@ git log --format='%an <%ae>' upstream/main..HEAD | sort -u   # tem que ser só w
     ("você não precisa fazer nada"). E antes de reportar qualquer entrega, **provar os claims
     do próprio resumo** (grep no branch por cada tela/módulo citado): PR verde não valida
     conteúdo (medido 26/09: resumo dizia "editor criado" e o arquivo tinha 0 ocorrências).
+12. **CONFLICTING: medir ANTES de acreditar** — `git merge-tree` contra o remoto **certo**
+    (`origin` pode ser o fork com main velha — medição inócua; o upstream é quem vale). Se o
+    conflito for real: `git merge` (nunca rebase) **unindo os dois lados**, e a escada:
+    marcadores → typecheck → testes do caminho → push → readback. Conflito de mesmo arquivo
+    com outra lei recém-mergeada = decidir a ORDEM (estado > conteúdo) e **fundir fakes
+    duplicados** (no mock, o primeiro `if` vence e o teste mente).
 
 ---
 
