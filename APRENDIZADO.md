@@ -191,3 +191,9 @@
   upstream, rodar local as 3 cercas antes do push; traduções novas = uma linha em
   `lib/i18n/dicionario.ts` no formato `"pt": { es: "..." }`. E o depend novo que a main trouxe
   exige `pnpm install` antes do typecheck (`@types/jsdom` mascarou como erro nosso).
+- **Corrida de migração ACONTECEU de novo (0426×0426, Onda 3)** — o `checar:colisao` é
+  por-branch, então cada filho mediu "próximo livre" em momentos diferentes e os dois pegaram
+  0426 (#1535 e #1537). Regra: **o pai mede o NNNN no dispatch e PINA o número no brief de
+  cada filho do lote** (0426, 0427, 0428…), em vez de deixar cada um medir. Correção aplicada:
+  quem entrou primeiro fica (#1715 = 0426), o outro renumera NNNN+timestamp juntos +
+  comentário no `baseline.sql` → checker passou a apontar 0428, os dois PRs MERGEABLE.
