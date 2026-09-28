@@ -303,3 +303,22 @@
   Ofereci ao mantenedor reescrever a autoria dos commits para ele e ele não pediu. Não troque
   `user.name`/`user.email` por conta própria depois do push: reescrever autoridade alheia sem
   pedido é mais estranho do que a assinatura `webtecnica`.
+
+- 🔧 **O guard de despacho existia e eu despachei 3 ondas sem chamar (28/09).**
+  `despachar.sh` nasceu em 26/09 e a única menção no log era a minha, de quando fui auditá-lo.
+  Eu conferia RAM "na mão" e seguia. Regra nova: **`bash /root/workspace/bin/despachar.sh` é o
+  PASSO OBRIGATÓRIO do pré-voo, antes do gate Jev e do `delegate_task`** — e o `n=` da saída é
+  o tamanho do lote, não o número que veio na sua cabeça. Se `rc=1`, não se despacha.
+
+- 🧮 **A v1 do guard só validava o N; quem despachava é que o definia (28/09).**
+  Assinatura `despachar.sh <n>` = você passava `3` sempre, então o "dinâmico" era intenção, não
+  código. A v2 **calcula**: teto por RAM (4 com 3,5G · 5 com 5G · 6 com 7G), piso 3, e sinaliza
+  divergência quando quem despacha passa um n acima do teto em vez de deixar passar em silêncio.
+  Testado isoladamente: 3,4G→BLOQUEIO · 3,6G→4 · 5,0G→5 · 7,0G→6.
+
+- 👶 **Filhos vivos contados nos manifests, não em gates (28/09).**
+  O item (d) da v1 usava `systemctl list-units 'dkj-*'` como PROXY — o próprio comentário
+  admitia "filhos vivos são conferidos com delegate_task list". Um filho rodando SEM gate ativo
+  aparecia como 0 e o guard liberava na hora errada. Agora: qualquer `live/*/task-*.log`
+  escrito nos últimos 10 min é um filho vivo. Na primeira execução da v2 ele achou os 2 filhos
+  da onda 2 que o proxy não enxergava como tal.

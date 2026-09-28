@@ -709,3 +709,24 @@
   `deskcomm-crm-contribuicao` (5 seções novas): releitura de comentário editado pela API;
   molde de medição do mantenedor; guarda de identidade no teste de fuso; rails de segurança do
   e2e; não reverter fix já verificado pelo revisor; autoria dos commits.
+
+### Despacho inteligente — auditoria e v2 do guard
+- O que fiz: auditei o despacho dinâmico a pedido. Achei 3 buracos e fechei os 3:
+  (1) o guard `despachar.sh` existia desde 26/09 e **nunca foi chamado** antes de hoje —
+  virou PASSO OBRIGATÓRIO do pré-voo na skill `deskcomm-crm-contribuicao`;
+  (2) a v1 só VALIDAVA o n recebido, então o lote era sempre 3 por convenção — a **v2 calcula**
+  o n (teto por RAM: 4/5/6 conforme 3,5/5/7G; piso 3) e sinaliza divergência em vez de
+  silenciar;
+  (3) filhos vivos eram contados por gates `dkj-*` como proxy — agora pelos **manifests**
+  (`live/*/task-*.log`, janela de 10 min).
+- Evidência:
+  - Execução real com a onda 2 viva: `DESPACHO BLOQUEADO — motivos: ram=1.0 fila=2 filhos=2`,
+    rc=1 (os 3 checkes dispararam; `filhos=2` veio direto dos manifests).
+  - Cálculo do n em isolamento: 3,4G→BLOQUEIO · 3,6G→4 · 5,0G→5 · 7,0G→6 · piso 3 / teto 6.
+  - Validação do argumento: `despachar.sh 9` → `n=9>teto=6`, rc=1.
+  - `bash -n` limpo.
+- Achados laterais registrados: cron `0010a08f360e` falhou às 08:16 com `HTTP 402 Insufficient
+  account balance` (3 ocorrências no log, todas do mesmo evento); o cron de status entregou
+  timestamp de 09:55 às ~10:15 e sinalizou `PR #513`, que é referência dentro do corpo da
+  issue #533 — sinal falso.
+- Status: ✅ v2 aplicada e testada; observação contínua do despacho registrada como preferência.
