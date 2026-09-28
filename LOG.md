@@ -685,3 +685,27 @@
     `prego_${suffix}` com `status: "STOPPED"` e não tem `afterAll`/delete — sobrevive ao
     teardown, que apaga só os 3 nomes de `NOMES_DE_SESSAO_E2E`.
 - Status: ✅ TAREFAS CONCLUÍDAS.
+
+### DeskcommCRM — Issue #1362 / PR #1831 (segunda rodada) e lições de processo
+- O que fiz: restaurei o patch dos três pontos (que o mantenedor já havia medido como corretos
+  no `3713f49`) e fechei os dois buracos que ele apontou na edição de 12:26Z: o mapa dos
+  horários livres da `AgendaInterativa` (`:115-122`, chave e rótulo em `diaLocalISO`/
+  `dataDeParede`, `fuso` nas dependências, mais `:210` e `:298`) e o `HistoricoDaAgenda`
+  (`:213-218`, agora com prop `fuso` obrigatória nas duas montagens). Teste novo no molde que
+  ele escreveu, com guarda de identidade para o teste não virar verde de fachada.
+- Evidência:
+  - Gates: `pnpm typecheck` rc=0; `pnpm cercas` 258 arquivos / 2466 testes rc=0; teste novo
+    2/2; os quatro testes de fuso/histórico 20 passed + 1 expected fail — todos via lane
+    `dk-heavy`, nenhum no terminal do gateway.
+  - Push no fork: commit `1fa6fe33c` na branch `fix/1362-grade-no-fuso`.
+  - PR: https://github.com/melgarafael/DeskcommCRM/pull/1831
+  - Comentário no PR: https://github.com/melgarafael/DeskcommCRM/pull/1831#issuecomment-5870586151
+  - e2e NÃO rodou aqui: a trava do `.env.e2e` (sem ele o app sob teste aponta para PRODUÇÃO)
+    não foi pulada; o `e2e` do CI está queued para este head e os três casos serão lidos antes
+    de qualquer afirmação.
+- Status: 🔄 em revisão — gates locais verdes, e2e de CI pendente.
+
+- Lições registradas em `APRENDIZADO.md` (6 entradas novas de 28/09) e na skill
+  `deskcomm-crm-contribuicao` (5 seções novas): releitura de comentário editado pela API;
+  molde de medição do mantenedor; guarda de identidade no teste de fuso; rails de segurança do
+  e2e; não reverter fix já verificado pelo revisor; autoria dos commits.

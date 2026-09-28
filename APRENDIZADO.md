@@ -265,3 +265,41 @@
   `origin/main` no brief** e confere antes com `git rev-list --count fork/main..origin/main`.
   Os 6 seeds seguintes já saíram corrigidos; a regra foi para a skill
   `deskcomm-crm-contribuicao`.
+
+- 📡 **GitHub não notifica edição de comentário — releia pela API antes de responder (28/09).**
+  O mantenedor editou o comentário `5862224323` às 12:26Z e eu respondi ao texto ANTIGO: perdi
+  o esqueleto de teste, a correção de duas causas e uma hipótese nova — a leitura mais útil da
+  troca inteira. Regra: `gh api .../issues/comments/<id>` e comparar `updated_at` com o
+  momento em que você leu. Vale para TODO comentário de revisor, não só para este.
+
+- 📐 **Copiar a MEDição do mantecedor, não só o pedido dele (28/09).**
+  O molde dele: mesmo `vitest` arquivo a arquivo trocando só o `TZ`; **um commit de CONTROLE**
+  (roda as sondas no `HEAD` anterior e confirma que elas devolvem os defeitos da rodada
+  passada — sem isso "verde" pode ser sonda cega); **declaração do que NÃO mediu** ("hipótese,
+  não trate como pedido", "li no código, não executei"); e **escopo de propriedade** ("se
+  continuar vermelho, eu abro o trace e o ajuste fica com a gente"). Fui eu que errei ao não
+  ter o controle: tive todos os gates locais verdes e o e2e piorou de 1→3.
+
+- 🧪 **Guarda de identidade no teste de fuso (28/09).**
+  Com org = navegador a conversão é a identidade e o teste passa com o defeito de volta.
+  Toda prova de fuso precisa de três coisas: asserção de **desigualdade** explícita contra o
+  relógio do ambiente, uma **guarda** que pula o caso dizendo em que ponto ele não provaria
+  nada (verde de fachada não vale), e âncora **fixa** (`13:00Z`, `America/Sao_Paulo`) — nada de
+  depender de que horas a suíte roda.
+
+- 🚫 **Rail de segurança não se pula: `.env.e2e` (28/09).**
+  `pnpm test:e2e` sem ele é barrado em `playwright.config.ts:18` de propósito — sem o arquivo o
+  app sob teste carrega `.env.local`, que aponta para **PRODUÇÃO**. Ou prepara o ambiente
+  (`pnpm e2e:env` + Supabase local de pé), ou deixa o CI rodar e **diz que não rodou**. Fiz a
+  segunda e o mantenedor entendeu; a primeira seria gravar dado em produção alheia.
+
+- 🚨 **Não reverta um fix que o revisor já verificou (28/09).**
+  Reverti o #1831 olhando só o e2e, enquanto ele confirmava os três pontos com sondas próprias
+  no mesmo `HEAD`. Antes de `reset --hard` / `--force-with-lease`, procure nas respostas do
+  revisor a confirmação do que funcionou. E classifique falha como alheia SÓ depois de medir
+  `main` × `HEAD` × `HEAD anterior`: errei dizendo "1 pré-existente" — eram 3 minhas.
+
+- ✍️ **Autoria dos commits fica com quem abriu o PR (28/09).**
+  Ofereci ao mantenedor reescrever a autoria dos commits para ele e ele não pediu. Não troque
+  `user.name`/`user.email` por conta própria depois do push: reescrever autoridade alheia sem
+  pedido é mais estranho do que a assinatura `webtecnica`.
