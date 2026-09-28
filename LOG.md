@@ -739,3 +739,12 @@
   (só link concreto vale), state 1.810 → 113 (poda), vivo = janela OU gate.
 - Testes: sandbox `teste-watchdog.py` (fechamento chama pausa; ocioso fica calado) + ciclo
   real `hermes cron pause` → `resume` (Next run 10:50) + rodada real mostrando os 2 filhos.
+
+### Cron de status: onda, issue e fila (opção B + transparência)
+- `delegation_watchdog.py` v2.1: status agrupado POR ONDA lendo `manifest.json`
+  (`issue_do()` extrai #NNN do goal; `prontas/N` do marcador de fim) + bloco de FILA.
+- Fonte nova `cache/delegation/fila-de-delegacoes.json` — ondas 1–3, e rodapé honesto:
+  programadas = 0 (fila da triagem esgotou).
+- Guard `despachar.sh`: pula log com marcador de fim (filho terminado não é vivo).
+- Gate Jev: os 6 critérios vão NO goal; `goal` rejeita `<marcador>`.
+- Testes: sandbox rc=0 (fechamento→pausa, ocioso→silêncio) + rodada real com a onda 3.

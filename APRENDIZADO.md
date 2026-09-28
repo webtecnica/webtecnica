@@ -339,3 +339,9 @@
   111 apontando pra log deletado** —, agora poda as que não existem mais (113).
   Adicional: filho em `dk-heavy --wait` não escreve no próprio log, então "vivo"
   = janela de 15min **OU** gate do lote rodando.
+
+- 🔍 **Status de delegação: faltavam DUAS coisas (28/09).** O cron já dizia "subagente iniciado", mas não respondia *de qual onda* ele vinha nem *o que estava programado*. Medi o que existia: o `manifest.json` de cada batch já traz `delegation_id`, `started`, `task_count` e o `goal` de cada tarefa (de onde sai o número da issue) — **o rótulo "onda N" e a FILA não existiam em lugar nenhum**. Duas peças novas: `fila-de-delegacoes.json` (escrito NO MOMENTO do gate rc=0, com `onda`/`issues`/`estado`/`pr`) e o watchdog agrupando o status por onda, com `issue_do()` saindo do goal. Saída agora: `ONDA 3 · deleg_4a433fa9 · 0/3 prontas` + cada filho com issue e tarefa, + `concluídas: 2 · 6 issues · 5 PRs / em execução / programadas: 0`. Lição de processo: **sem o arquivo da fila, "ondas programadas" é impossível de reportar** — não é falta de código, é falta do registro.
+
+- 🚦 **O gate Jev pontua o GOAL, não o context (28/09).** Os 6 critérios (repo/alvo, arquivo, critério de sucesso, comando de teste, restrições, artefato) têm de estar DENTRO do `goal`. Escrevi goals de uma linha com tudo no `context` → reprovou 2× seguidas (1,59; depois a outra task caiu pra 1,75). Inline no goal, as três passaram de uma vez (1,92/1,96/2,05). E `goal` NÃO aceita marcador de template: um `<arquivo-novo>` derruba o dispatch com erro próprio, antes do gate.
+
+- 🔧 **Guard contava filho TERMINADO como vivo (28/09).** `despachar.sh` media só o mtime (janela 10min), então os 3 filhos com `exit_reason=completed` (10:57) ainda bloqueavam a onda seguinte às 11:06. Agora pula log com marcador de fim — os MESMOS que o `delegation_watchdog.py` usa. Os dois lerem a mesma verdade de "terminou" é o que fecha o ciclo pause↔resume.
