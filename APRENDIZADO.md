@@ -437,3 +437,19 @@ antes de sair de um turno interrompido) + cron `retomar-pendencias` (`c0c0badda9
   Isso entra na escolha do lote (o `lote-dinamico.py` só olhava RAM/erros).
 - **10 PRs merged em 28/09** (disse 6): contagem só por
   `gh pr list --state merged --search "author:@me merged:YYYY-MM-DD"`.
+
+
+## 2026-09-28 (tarde, rodada 2) — aprendendo com o que VOLTOU
+- **Logs são 0-indexados** (`task-0.log`): meu probe varrendo `task-1..3` gritou
+  "task-3 sem log" — falso. Os scripts de produção usam glob e estão certos.
+- **Manifesto fica `running` para sempre** depois de morrer (8 delegações "em voo").
+  Duas fontes mentem em direções opostas; a regra que não falhou:
+  **terminou = marcador no log OU log parado >30min**.
+- **`filhos=0` no guard é correto, não desperdício**: gates com `MemoryMax=5G` por
+  filho → 5 encavalitados = 25G em 6G. `fila=0` (b) e `filhos=0` (d) são a mesma
+  contenção de dois lados; encavalitar exige teto global, não `< teto`.
+- **Novo `scripts/ondas-historico.py`** — 54 delegações medidas: onda de 3 =
+  **mediana 57min, faixa 8–155**. O número de issues pesa mais que a classe —
+  entra agora na escolha do lote (o `lote-dinamico.py` só olhava RAM/erros).
+- **10 PRs merged em 28/09** (disse 6): contagem só por
+  `gh pr list --state merged --search "author:@me merged:YYYY-MM-DD"`.
