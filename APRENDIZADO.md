@@ -438,4 +438,26 @@ antes de sair de um turno interrompido) + cron `retomar-pendencias` (`c0c0badda9
 - **10 PRs merged em 28/09** (disse 6): contagem só por
   `gh pr list --state merged --search "author:@me merged:YYYY-MM-DD"`.
 
+## 28/09 · "Medir na main" é gate, não intenção
 
+**Sintoma.** O PASSO 0 do #1863 devolveu número de migração errado e a lista de publicação
+errada. A instrução na skill dizia "leia sempre de um worktree da main atual" — e eu li.
+Do jeito errado.
+
+**Causa raiz medida.** Dos **46 worktrees** do repo, **nenhum está na main**, e o clone
+`/root/workspace/DeskcommCRM` está numa feature (`fix/998-...`). Qualquer padrão da forma
+`cd <clone> || cd <wt>` **nunca** cai na main — o fallback não é a exceção, é o caminho.
+A regra escrita não tinha quem a verificasse.
+
+**Arranjo: `bin/medir-na-main.sh '<comando>'`.**
+Resynca um worktree fixo `_main`, imprime `BASE=<sha>` e **aborta com rc=4 sem executar**
+quando HEAD ≠ `origin/main`. Toda medição de estado atual do repo passa por ele.
+
+**"Teste sempre" pagou na hora.** Os 6 casos rodam: rc=0/3/4/2 conforme o esperado — e o
+CASO 4 (worktree quebrado) **falhou com rc=128 em vez de 4**: o `set -eu` comia o
+`$(git rev-parse HEAD)` antes da guarda rodar. Sem aquele teste, a trava existiria no papel
+e deixaria passar exatamente o caso em que precisava travar. Trava não testada não é trava.
+
+**O que mudou.** Skill `deskcomm-crm-contribuicao`: bloco 🔒 no PASSO 0 (SKILL.md) e no
+`references/pre-voo-do-lote.md` + entrada na memória ("TESTE SEMPRE"). Duas ocorrências do
+mesmo tipo hoje: regra escrita sem gate, e gate escrito sem teste.
