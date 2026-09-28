@@ -635,3 +635,53 @@
 - Status: ✅ Concluído e enviado.
 
 
+
+## 2026-09-28 — DeskcommCRM: triagem das 25 confirmadas, 4 PRs entregues, revisão dos abertos e a correção do #1831
+
+### DeskcommCRM — Issue #1362 / PR #1831 (fase de revisão do mantenedor)
+- O que fiz: apliquei os 3 pontos da triagem (fuso no `minutoDoDia`, `chaveDoDiaDoInstante`
+  na coluna/"hoje", `dataDeParede` nas formatações) + os 2 não-bloqueantes + o caso Tokyo.
+- Evidência:
+  - Gates locais verdes: typecheck, lint 0 errors, 21/21 sob `TZ=Asia/Tokyo`, `gov:verify`
+    rc=0 (1509 arquivos, 15399 testes).
+  - **Mas o e2e piorou**: baseline `510df9fb5` = 1 failed/115 passed → `3713f49e3` =
+    3 failed/113 passed (introduzi `agenda-grade-interativa:402` e
+    `agenda-remarcar-e-cancelar:171`).
+  - Causa da `:171`: `dataDeParede` no painel e no `_client`, enquanto
+    `HistoricoDaAgenda.tsx` segue em relógio de navegador → teste textual divergiu.
+  - Correção: reverti para `510df9fb5` com `--force-with-lease`; medições documentadas em
+    `melgarafael/DeskcommCRM#issuecomment-5869960962`.
+  - Patch do trabalho guardado em `/tmp/1831-ponto123.patch` (488 linhas).
+- Status: ⛔ INTERROMPIDO: conserto precisa ser refeito por fatias com e2e rodado a cada passo.
+
+### DeskcommCRM — 4 PRs entregues por subagentes (ondas)
+- O que fiz: 4 issues resolvidas com PASSO 0 prévio e gate Jev no seed.
+  - Issue #890 → PR **#1841** (docs em inglês) — **MERGED**.
+  - Issue #286 → PR **#1843** (migra os 4 dublês legados + gate `DUBLES_LEGADOS` vazio).
+  - Issue #1032 → PR **#1844** (vigia de saúde ignora sessão E2E, lista canônica única).
+  - Issues #1806/#1540 → PRs **#1825**/**#1683** (lote anterior, CI 0 falha).
+- Evidência:
+  - #1841 MERGED; #1843 (21 checks) e #1844 (17 checks) com **0 falha**.
+  - #1825 (20 checks) e #1683 (20 checks) com **0 falha**.
+- Status: ✅ TAREFAS CONCLUÍDAS (aguardando review do mantenedor).
+
+### DeskcommCRM — Triagem das 25 issues `triagem:confirmado`
+- O que fiz: PASSO 0 (último comentário + PR ligado + grep na main) nas 25, via 3 subagentes.
+- Evidência:
+  - 7 já RESOLVIDAS na main (297, 484, 511, 558, 568, 817, 881) → só o mantenedor fecha.
+  - 5 só precisam de fechamento manual (1040, 990, 1019, 1023, 1114) — 403 para o nosso token.
+  - 9 disponíveis de verdade, 2 ocupadas (653, 880 — "pego esta" há 11-12 dias sem PR),
+    2 dependem de decisão dele (374, 999).
+  - PASSO 0 me pegou 2 erros: #817 e #568 estavam com PR **merged**, não fechado.
+- Status: ✅ TAREFAS CONCLUÍDAS.
+
+### DeskcommCRM — Revisão dos 7 PRs nossos abertos
+- O que fiz: revisei diffs, CI e `mergeStateStatus` de todos os nossos PRs abertos.
+- Evidência:
+  - #1711 e #1672 **CLEAN** (21 e 22 checks, 0 falha) — prontos para merge.
+  - #1843, #1844, #1825, #1683 com 0 falha (CI ainda correndo em alguns).
+  - **Nenhum precisou de correção de código.**
+  - Achado lateral (é da #686): `tests/e2e/pre-go-live-whatsapp.spec.ts` cria
+    `prego_${suffix}` com `status: "STOPPED"` e não tem `afterAll`/delete — sobrevive ao
+    teardown, que apaga só os 3 nomes de `NOMES_DE_SESSAO_E2E`.
+- Status: ✅ TAREFAS CONCLUÍDAS.

@@ -213,3 +213,46 @@
   datacenter ("browser may not be secure") — fluxo email + Playwright headless funcionou.
   Config final: main+delegation `opencode-go/mimo-v2.6-flash`, fallback do principal =
   [xiaomi, deepseek], delegation sem fallback; `.env HERMES_INFERENCE_MODEL` vence config.
+
+- 🔴 **NUNCA afirmar um fix sem ter rodado o teste que ele promete consertar (#1831, 28/09).**
+  Escrevi no PR "o Ponto 1 é a cura do e2e" sem rodar o e2e. Medi depois: baseline
+  `510df9fb5` = **1 failed/115 passed** (só `agenda-grade-interativa.spec.ts:236`) → meu
+  `3713f49e3` = **3 failed/113 passed** — introduzi `:402` e `agenda-remarcar-e-cancelar:171`.
+  Método de atribuição (barato, use sempre): `gh run list --branch <b> --limit 12` → achar o
+  run do commit ANTERIOR → baixar os 2 logs (`gh run view --job <id> --log`) → `grep -aP '✘\s+\d+\s+\['`
+  e o bloco `\d+ failed` do fim. Mesmo total de testes (116) = mesma suíte, então a diferença
+  é sua. Regra: "resolvido" só depois do gate específico rodar E da comparação com a baseline.
+  Reverti para `510df9fb5` (`--force-with-lease`) e documentei a medição no PR.
+
+- **O conserto pode CRIAR exatamente o defeito que ataca (#1831).** Passei `dataDeParede` no
+  painel e no `_client`, mas `components/agenda/HistoricoDaAgenda.tsx` continua com
+  `format(comeca, "HH:mm")` = relógio do NAVEGADOR. O teste lê o rótulo do painel e exige que
+  o histórico o repita → divergiu (`10:30` esperado, `12:00 – 12:30` recebido). Trocar o fuso
+  de UMA tela exige trocar TODAS as que mostram o MESMO instante, ou o teste textual quebra.
+  E o fantasma de arraste só renderiza sob `proposta && proposta.dia === chaveDoDia(dia)`
+  (`GradeDaAgenda.tsx:694`) — é ali que uma mudança de fuso mata o gesto sem erro nenhum.
+
+- **PASSO 0 pegou 2 erros MEUS no mesmo dia**: tinha #817 e #568 como "PR fechado", na
+  verdade `#1787` e `#1511` estavam **MERGED** = resolvidas. PASSO 0 não serve só para issue
+  alheia — serve para as minhas próprias conclusões. grep na main + ler comentários antes de
+  classificar qualquer coisa.
+
+- **Revisão dos 7 PRs abertos nossos (28/09): nenhum precisou de correção.** Padrões que
+  valem copiar: (a) #1843 criou `DUBLES_LEGADOS = new Set<string>()` VAZIO com a frase "a
+  lista só pode ENCOLHER" — gate de classe que impede dublê novo sem proibir nada hoje;
+  (b) #1844 reusou a lista canônica (`NOMES_DE_SESSAO_E2E`, agora em
+  `lib/channels/sessoes-e2e.ts`) em vez de criar uma segunda cópia, e documentou por que é
+  LISTA FECHADA e não prefixo `e2e-` (um prefixo excluiria dezena desconhecida de vigia).
+  Produção não importa de `scripts/` → a categoria migrou para `lib/` e os 2 importadores
+  antigos apontam para lá. Achado lateral (é da #686, não do #1032):
+  `tests/e2e/pre-go-live-whatsapp.spec.ts` cria `prego_${suffix}` com `status: "STOPPED"` e
+  tem **zero** `afterAll`/delete — o único dos 6 specs que criam `STOPPED` e não se limpa;
+  sobrevive ao teardown (que apaga só os 3 nomes da lista) e usa exatamente um status que
+  `STATUS_QUE_AVISAM` alarme.
+
+- **Comparativo de modelos (28/09, 51 lotes / 110 tarefas):** `space-bunny-free` = **57%** de
+  conclusão (10 de 28 abandonadas) mas **100% de merge** (11/11); `mimo-v2.6-flash` = **88%**
+  (58/66) e **84%** de merge (27/32) com **0 fechado sem merge**; `deepseek-flash` = 100% e
+  90%. Mediano de lote: bunny 77min, mimo 52min, deepseek 41min. Cuidado com a leitura: o
+  100% do bunny é SOBREVIVÊNCIA — só conta o que ele terminou; o que abandonou não virou PR.
+  Atribuição de PR por modelo = varrer `DeskcommCRM/pull/N` nos `task-*.log` de cada lote.
