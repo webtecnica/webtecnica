@@ -256,3 +256,12 @@
   90%. Mediano de lote: bunny 77min, mimo 52min, deepseek 41min. Cuidado com a leitura: o
   100% do bunny é SOBREVIVÊNCIA — só conta o que ele terminou; o que abandonou não virou PR.
   Atribuição de PR por modelo = varrer `DeskcommCRM/pull/N` nos `task-*.log` de cada lote.
+
+- ⚠️ **`fork/main` é um espelho morto — basear PR nele é o erro silencioso (medido 28/09).**
+  `fork/main` = `e142504da` (PR #721) enquanto `origin/main` já passou de 5700: **4.178 commits
+  de diferença**, e `fork/main` está 0 commits à frente (nunca recebe nada). Meu brief da onda 1
+  mandava `worktree add ... fork/main`; os 3 filhos detectaram e recriaram a branch em
+  `origin/main` sozinhos — deu certo por sorte, não por projeto. Regra: **o pai escreve
+  `origin/main` no brief** e confere antes com `git rev-list --count fork/main..origin/main`.
+  Os 6 seeds seguintes já saíram corrigidos; a regra foi para a skill
+  `deskcomm-crm-contribuicao`.
