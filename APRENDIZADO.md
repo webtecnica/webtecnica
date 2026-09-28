@@ -461,3 +461,40 @@ e deixaria passar exatamente o caso em que precisava travar. Trava não testada 
 **O que mudou.** Skill `deskcomm-crm-contribuicao`: bloco 🔒 no PASSO 0 (SKILL.md) e no
 `references/pre-voo-do-lote.md` + entrada na memória ("TESTE SEMPRE"). Duas ocorrências do
 mesmo tipo hoje: regra escrita sem gate, e gate escrito sem teste.
+
+## 28/09 · O lembrete de pendências era estruturalmente mudo
+
+**Sintoma.** 7 pendências gravadas — uma de **ontem** — e o cron `retomar-pendencias`
+nunca tinha falado. Parecia "sistema ocupado".
+
+**Medido:** modo padrão → SILENCIOU; `forcado` → `[filhos=2 gates=4 ocupado]`.
+
+**Causa lógica:** `pronto = filhos==0 AND gates==0` é uma contradição prática —
+pendência existe porque há trabalho, trabalho mantém gates rodando, gate ⇒ silêncio.
+O lembrete só dispararia quando **já não houvesse mais nada pendente**. Um mecanismo
+que só funciona com o sistema ocioso não é retomada: é agradecimento.
+
+**Pior:** dos 4 gates `running`, **2 eram fantasmas** — `dk-dk1570amb` sem escrita há
+**1699min (28h)** e `dk-onda3-636-foco` há 166min, nenhum com processo vivo. O
+`gates_rodando()` contava fantasma. Mesma classe do "manifesto fica `running` para
+sempre" já anotada antes.
+
+**Arranjo novo:** silêncio por **idade da pendência** (<15min cala; já falada há <45min
+cala; senão fala e grava `ultima_falado_em`). Gates só mudam o rótulo
+`[LIVRE]`/`[ocupado]`, nunca o silêncio. Gate conta só se mexeu nos últimos 30min **ou**
+tem processo `dk-heavy` vivo. Saída ganhou `⏱ parada há 3h19min · PRIORIDADE ALTA`.
+
+**"Teste sempre" — 3 bugs, todos meus, todos pegos por teste:**
+
+1. `set -eu` comia o `rc` do `$(git rev-parse HEAD)` antes da guarda do
+   `medir-na-main.sh` → o aborto nunca disparava.
+2. `f"/tmp/{n}.state"` com `n` já terminando em `.state` → `…state.state`, o fallback
+   por processo nunca casava.
+3. `strptime` exigindo hora → pendência gravada **só com data** saía **sem idade** —
+   e era `pendentes-antigos`, a mais antiga de todas.
+
+Suíte: T1 fala · T2 não repete · T3 `forcado` · T4 gates = 2 reais/2 fantasmas ·
+T5 recém-gravada cala · T6 lista vazia cala · 7/7 idades.
+
+**Lacuna exposta:** `scripts/` (`.hermes/`), `bin/` e `skills/` **não estão em git** —
+o que eu "atualizo" nessas três áreas não tem histórico nem rollback.
