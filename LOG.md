@@ -730,3 +730,12 @@
   timestamp de 09:55 às ~10:15 e sinalizou `PR #513`, que é referência dentro do corpo da
   issue #533 — sinal falso.
 - Status: ✅ v2 aplicada e testada; observação contínua do despacho registrada como preferência.
+
+### Cron de status de subagentes: opção B (pausa↔resume)
+- `delegation_watchdog.py` v2: status por filho a cada tiro + auto-pause no último fim.
+- `despachar.sh` v2: ganhou o bloco (e) `hermes cron resume 40532a7a2005` (sem `--run-now`,
+  de propósito: o próximo tiro tem de ser quando os filhos já começaram).
+- Bugs medidos e corrigidos: 9 "ativos" sendo 2 (janela de 15min), falso `PR #513`
+  (só link concreto vale), state 1.810 → 113 (poda), vivo = janela OU gate.
+- Testes: sandbox `teste-watchdog.py` (fechamento chama pausa; ocioso fica calado) + ciclo
+  real `hermes cron pause` → `resume` (Next run 10:50) + rodada real mostrando os 2 filhos.

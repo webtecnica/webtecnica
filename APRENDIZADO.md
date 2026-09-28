@@ -322,3 +322,20 @@
   aparecia como 0 e o guard liberava na hora errada. Agora: qualquer `live/*/task-*.log`
   escrito nos últimos 10 min é um filho vivo. Na primeira execução da v2 ele achou os 2 filhos
   da onda 2 que o proxy não enxergava como tal.
+
+- 🤖 **Cron de status de subagentes: pause↔resume fechou o ciclo (28/09).** O
+  `delegation-status-smart` (`40532a7a2005`) era `no_agent` e `*/5`, mas: só dizia
+  "iniciado/finalizado" (não o status), e ficava agendado pra sempre. Virou v2
+  (`delegation_watchdog.py`): imprime STATUS de cada filho vivo a cada tiro
+  (PR, gate rodando, última ferramenta), e **se pausa sozinho com `hermes cron
+  pause` quando o último termina**. A reativação é obrigatoriamente externa — é o
+  `despachar.sh` que chama `hermes cron resume` — porque o ovo-e-galinha (quem
+  acorda quem se pausa?) só fecha se o acordar estiver no passo que já é
+  obrigatório antes de todo dispatch. **Três bugs medidos no caminho:** (1)
+  contava 9 "ativos" sendo 2 reais — logs antigos sem marcador de fim viravam
+  fantasmas; corrigido com janela de 15 min; (2) o `PR #(\d+)` pegava referência
+  no corpo de issue e recriou o falso "PR #513"; corrigido só para link
+  `github.com/.../pull/N`; (3) o state crescia sem parar — **1.810 entradas,
+  111 apontando pra log deletado** —, agora poda as que não existem mais (113).
+  Adicional: filho em `dk-heavy --wait` não escreve no próprio log, então "vivo"
+  = janela de 15min **OU** gate do lote rodando.
