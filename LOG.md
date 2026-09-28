@@ -748,3 +748,25 @@
 - Guard `despachar.sh`: pula log com marcador de fim (filho terminado não é vivo).
 - Gate Jev: os 6 critérios vão NO goal; `goal` rejeita `<marcador>`.
 - Testes: sandbox rc=0 (fechamento→pausa, ocioso→silêncio) + rodada real com a onda 3.
+
+## 2026-09-28 (tarde) — G1 fechado, fila programada e pendência durável
+- **Causa raiz da onda 3 morta:** `dk-heavy --sync` rodava o gate **dentro do processo
+  sem teto** (`--wait` clampava, `--sync` não) → heartbeat congelou >300 s → watchdog
+  reiniciou gateway → 3 filhos morreram no mesmo segundo. **Fix: `--sync` enfileira e
+  espera com teto 300 s.**
+- **Resgate medido antes de reenviar:** 3 worktrees com trabalho, **0 PRs** → redespatch
+  como arremate (`deleg_eee06831`), não do zero. #196 → PR #1855.
+- **Fila programada:** `cache/delegation/fila-de-delegacoes.json` (ondas 1–7, 18 issues).
+  Agora o **`despachar.sh --onda/--issues` grava sozinho** via `fila-upsert.py`,
+  antes do FAIL — fecha o elo humano; 5/5 testes + `bash -n` + integração real.
+- **Watchdog 3 corrigidos:** filho morto contado como vivo (marcadores de fim) ·
+  onda morta contada como `programada` (17→14) · "sem concluir" para onda refeita
+  (→ `superada_por` + `↩ mortas e REFEITAS`).
+- **PASSO 0 achou erro no corpo da #1833:** `encerrada_por` é de `demandas`, não de
+  `conversations`. O grep no `CREATE TABLE` deu falso negativo (`tags` está no
+  `ALTER TABLE` linha 5303) — insistir na checagem evitou claim errado.
+- **Pendência durável:** `cache/pendencias.json` + cron `retomar-pendencias`
+  (`c0c0badda9f3`, 10 min, no_agent, silêncio quando ocupado) — 4/4 testes.
+- **Status das 12 issues do usuário:** 2 fechadas, 1 em terceiro, 1 pré-requisito feito,
+  1 reservada parada, 2 esperando resposta, 4 intocadas.
+- Commits: `a9adcd2` (antes) + este.

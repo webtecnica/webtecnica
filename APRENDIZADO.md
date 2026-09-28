@@ -345,3 +345,80 @@
 - 🚦 **O gate Jev pontua o GOAL, não o context (28/09).** Os 6 critérios (repo/alvo, arquivo, critério de sucesso, comando de teste, restrições, artefato) têm de estar DENTRO do `goal`. Escrevi goals de uma linha com tudo no `context` → reprovou 2× seguidas (1,59; depois a outra task caiu pra 1,75). Inline no goal, as três passaram de uma vez (1,92/1,96/2,05). E `goal` NÃO aceita marcador de template: um `<arquivo-novo>` derruba o dispatch com erro próprio, antes do gate.
 
 - 🔧 **Guard contava filho TERMINADO como vivo (28/09).** `despachar.sh` media só o mtime (janela 10min), então os 3 filhos com `exit_reason=completed` (10:57) ainda bloqueavam a onda seguinte às 11:06. Agora pula log com marcador de fim — os MESMOS que o `delegation_watchdog.py` usa. Os dois lerem a mesma verdade de "terminou" é o que fecha o ciclo pause↔resume.
+
+
+## 2026-09-28 (tarde) — o dia em que uma onda morreu e o status precisou virar honesto
+
+### O que aconteceu
+
+A onda 3 (`deleg_4a433fa9`) morreu às 11:37: **os 3 filhos pararam no MESMO segundo**.
+Medido, não deduzido — `date -r` nos 3 logs + gates `done` + gateway PID `381896` morto.
+
+**Causa raiz:** `dk-heavy.sh:74` — o ramo `MODO_SYNC=1` rodava o worker **dentro do
+processo, sem teto**. O `--wait` já clampava em 300 s; o `--sync` não. Um gate de
+minutos congelou o heartbeat (421 s), o watchdog reiniciou o serviço e matou a onda
+inteira. **A última porta do G1.**
+
+**Arranjo:** `--sync` agora enfileira e espera com teto de 300 s (mesma semântica
+para quem chamou; se estourar, `exit 124` + `ainda-rodando (teto G1 300 s)`).
+
+Resgate: medi os 3 worktrees antes de reenviar — 1 com trabalho, 2 com trabalho,
+1 limpo, **0 PRs**. Redespacho como **arremate** (`deleg_eee06831`), não do zero.
+
+### O relatório estava mentindo (três vezes)
+
+1. **Guard contava filho morto como vivo** — porque `filhos_vivos()` olhava só o mtime
+   e a janela, sem procurar marcador de fim. Fix: procura `status=completed|timeout|...`
+   **ou** `exit_reason=` **E** mantém a janela.
+2. **"ondas programadas: 17"** — a onda 3 morta entrava como *programada*. Critério
+   virou `estado == "programada"`. 17 → 14.
+3. **"encerradas sem concluir: 3"** para uma onda **cujo trabalho foi todo refeito**
+   pela 3b. Virou `superada_por` + linha `↩ mortas e REFEITAS (nada perdido)`.
+
+> Lição: **"programada" é uma afirmação sobre o mundo, não sobre a ausência de
+> "concluída".** Qualquer `else` ali vira fantasma.
+
+### O elo humano que faltava (e que eu mesmo apontei)
+
+Ao auditor a fila, o manifest já trazia `delegation_id`/`started`/`goal` — mas
+**ninguém guardava o que estava planejado**. Sem o registro, "ondas programadas"
+é impossível de reportar, por mais código que exista.
+
+Agora `despachar.sh --onda=4 --issues=1355,1833` **registra sozinho**, via
+`fila-upsert.py`, **antes** do `FAIL` de propósito: `programada` é um PLANO e existe
+mesmo que o guard esteja bloqueado. A entrada não depende mais de eu lembrar.
+
+Testado: 5/5 (criar · preservar as existentes · re-run não duplica · arquivo
+corrompido **não destroi** · `--issues` vazio), mais `bash -n` e a integração real
+(registrou com guard bloqueado; fila restaurada depois).
+
+### O grep que mentiu no `CREATE TABLE`
+
+Para liberar a F1 da #1833, busquei `tags` no bloco `CREATE TABLE` de `conversations`
+e recebi **`NENHUMA achada`**. A coluna existia — no `ALTER TABLE` da **linha 5303**
+(migração 0033). Se tivesse acreditado, teria escrito "a coluna não existe".
+
+E foi *por insistir na checagem* que apareceu o achado de verdade: o corpo da issue
+lista `encerrada_por` como coluna de `conversations` — **é de `demandas`**
+(`baseline.sql:19307`). Codar como escrito geraria query lendo coluna inexistente.
+
+> **O corpo da issue também pode estar errado.** PASSO 0 não é só para saber o que
+> fazer — é para descobrir o que a issue afirma errado.
+
+### Pendência durável, não só `todo_list`
+
+`todo_list` só serve se eu olhar. Faltava a segunda metade: **ser devolvido quando
+fico livre**. Agora: `cache/pendencias.json` (gravar `titulo`/`proximopasso`/`contexto`
+antes de sair de um turno interrompido) + cron `retomar-pendencias` (`c0c0badda9f3`,
+10 min, `no_agent`) que fala **só** com pendência **E** sistema livre (0 filhos,
+0 gates). Ocupado → **silêncio**. 4/4 testes, dois bugs corrigidos pelo teste
+(`print("")` entregava linha em branco; `forcado` vazia imprimia `PENDÊNCIAS (0)`).
+
+### Arquivos
+
+- `bin/despachar.sh` — flags `--onda/--issues/--tema` → bloqueco (f)
+- `scripts/fila-upsert.py` — upsert com `FILA_DELEGACOES` override p/ teste
+- `scripts/delegation_watchdog.py` — `resgatadas`/`abandonadas`/`superada_por`
+- `scripts/retomar-pendencias.py` + cron `c0c0badda9f3`
+- `cache/delegation/fila-de-delegacoes.json` — ondas 1–7 (18 programadas)
+- skill `deskcomm-crm-contribuicao` → `references/onda-morta-e-transparencia.md`
