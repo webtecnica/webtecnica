@@ -75,3 +75,15 @@ Repo: `agent` | `webui` | `deskcomm` | `infra` (playbook/ecossistema)
 2026-09-25 | antigravity | webui | CR PR #7022: rebase sob master atendendo mantenedor, resolucao de conflito em upload.py (#6939) | #7022 / 79a5c262 | open
 2026-09-25 | antigravity | agent | issue #122328 → PR #122348 (include missing shipped first-party roots in FIRST_PARTY_MODULE_ROOTS) | #122348 / 38c52e3 | open
 2026-09-25 | antigravity | agent | issue #122349 → PR #122359 (honor ignore rules and exclude runtime state from workspace member stamp) | #122359 / 0268a47 | open
+2026-10-07 | antigravity | webui | CR PR #7906: omit synthesized reason on scheduled and require schedule_task | #7906 / 440f9f34 | open
+2026-10-07 | antigravity | webui | CR PR #7932: remove mtime touch on hits and validate built_at timestamp (Refs #7723) | #7932 / 3392dc4b | open
+2026-10-07 | antigravity | agent | CR PR #83926: test arbitrary depth parametrization for plugin config keys (#83899) | #83926 / 793d6a52 | open
+2026-10-07 | antigravity | agent | CR PR #84861: check mtime in token preservation and use behavioral tests (#84843) | #84861 / f308c6f7 | open
+2026-10-07 | antigravity | agent | CR PR #83279: behavioral resanitize assistant messages during retry loops (#6545) | #83279 / ef7fe184 | open
+2026-10-07 | antigravity | agent | CR PR #81716: resolve worktree relative paths against execution cwd on Windows (#81650) | #81716 / 755330e0 | open
+2026-10-07 | antigravity | agent | CR PR #81643: do not ack busy queue when event dropped at max limit (#81632) | #81643 / c6305764 | open
+2026-10-07 | antigravity | agent | CR PR #83585: single-pass evaluation for adopt dry-run in curator (#83573) | #83585 / d99d8422 | open
+2026-10-07 | antigravity | agent | CR PR #82009: verification and review acknowledgment for child approval isolation (#76943) | #82009 | open
+2026-10-07 | antigravity | agent | CR PR #77785: verification and review acknowledgment for parked probe reconnect bounds (#77765) | #77785 | open
+2026-10-07 | antigravity | agent | CR PR #77949: verification and review acknowledgment for BlueBubbles Windows path delimiters (#77782) | #77949 | open
+

@@ -770,3 +770,54 @@
 - **Status das 12 issues do usuário:** 2 fechadas, 1 em terceiro, 1 pré-requisito feito,
   1 reservada parada, 2 esperando resposta, 4 intocadas.
 - Commits: `a9adcd2` (antes) + este.
+
+## 2026-10-07 — Antigravity (PC): CRs resolvidos em hermes-webui e hermes-agent (Lote 13)
+
+### hermes-webui — CR PR #7906 (Issue #7900)
+- O que fiz: atendidos os apontamentos do revisor mantenedor @nesquena-hermes no PR #7906:
+  1. Omissão de `reason` sintetizado ao mover cards de forma direta para Scheduled (`reason = body.get("reason") or None`), evitando que descrições padrão sobrescrevam resumos reais de workers ou simulem execuções indevidas.
+  2. Implementado fail-closed caso a versão do Hermes Agent instalada não suporte `schedule_task`, lançando `RuntimeError("scheduling requires a newer Hermes Agent")` e respondendo HTTP 409 limpo.
+- Evidência:
+  - Testes: 50/50 passed em `tests/test_kanban_bridge.py`.
+  - Push no fork: commit `440f9f34` na branch `fix/7900-kanban-scheduled-status`.
+  - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7906#issuecomment-6028107106
+- Status: ✅ Concluído e enviado.
+
+### hermes-webui — CR PR #7932 (Refs #7723)
+- O que fiz: atendidos os 3 direcionamentos do review sênior do mantenedor @nesquena-hermes:
+  1. Removida a função `_touch_models_cache_mtime()` e seus 3 pontos de chamada em `get_available_models_for_session_visit()`, garantindo política zero-write em cache hits de memória e disco sem mutações espúrias de mtime.
+  2. Mantida a validação de `_built_at` com guarda contra timestamps futuros ou não-finitos (`0 < built_at <= time.time() and math.isfinite(built_at)`), com fallback seguro para mtime em caches legados ou não-estampados.
+  3. Criado documento de arquitetura `docs/architecture/models-cache-invalidation.md`, indexado em `docs/CONTRACTS.md`, retitulado o PR para `Refs #7723` com seção de Contract Routing.
+- Evidência:
+  - Testes: 7/7 passed em `tests/test_issue7723_models_cache_mtime_refresh.py`.
+  - Ruff scoped e py_compile limpos.
+  - Push no fork: commit `3392dc4b` na branch `fix/7723-models-cache-hit-mtime-refresh`.
+  - Comentário no PR: https://github.com/nesquena/hermes-webui/pull/7932#issuecomment-6038699978
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — CR PR #83926 (Issue #83899)
+- O que fiz: atendido o feedback de revisão de @Enough1122 adicionando parametrização para chaves aninhadas arbitrariamente sob `plugins.*` (`plugins.a.b.c.d`) em `tests/hermes_cli/test_set_config_value.py`, garantindo serialização YAML fiel e validação sem falsos alertas.
+- Evidência:
+  - Testes: 89/89 passed em `tests/hermes_cli/test_set_config_value.py`.
+  - Push no fork: commit `793d6a52` na branch `fix/83899-plugins-config-allowlist`.
+  - Comentário no PR: https://github.com/NousResearch/hermes-agent/pull/83926#issuecomment-6028178319
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — CR PR #84861 (Issue #84843)
+- O que fiz: atendidos os apontamentos de revisão de @Enough1122:
+  1. `_verify_mcp_tokens_preserved()` agora verifica tanto `st_size` quanto `st_mtime_ns`, detectando substituição ou rotação de tokens de mesmo tamanho.
+  2. Substituído o teste de inspeção estática AST por teste comportamental acionando `_cmd_update_impl` com componentes mockados.
+- Evidência:
+  - Testes: 8/8 passed em `tests/hermes_cli/test_update_preserves_mcp_tokens.py`.
+  - Push no fork: commit `f308c6f7` na branch `fix/84843-preserve-mcp-tokens`.
+  - Comentário no PR: https://github.com/NousResearch/hermes-agent/pull/84861#issuecomment-6028249575
+- Status: ✅ Concluído e enviado.
+
+### hermes-agent — Lote de CRs validados e respondidos
+- PR #83279 (commit `ef7fe184`): teste comportamental de re-sanitização em loops de retry eliminando asserções via `inspect.getsource`.
+- PR #81716 (commit `755330e0`): normalização `os.path.normcase` para caminhos de worktree no Windows e teste de retentativa compartilhada.
+- PR #81643 (commit `c6305764`): gate booleano em `_queue_or_replace_pending_event` impedindo falso ack emoji sob descarte no teto da fila de sessão ocupada.
+- PR #83585 (commit `d99d8422`): avaliação em passagem única de `is_curator_managed` no adopt dry-run.
+- PRs #82009, #77785, #77949: suítes validadas localmente e revisões respondidas no GitHub.
+- Status: ✅ TAREFAS CONCLUÍDAS
+
