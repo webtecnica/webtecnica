@@ -9,6 +9,15 @@
 
 ## 0. Como usar este playbook (Antigravity)
 
+> 🔥 **WARM COM JEV — regra dura do Marcos, nos 3 repos (31/10).** Antes de **qualquer** despacho de
+> subagente (DeskcommCRM, hermes-agent, hermes-webui) — inclusive 1 filho, triagem ou pesquisa:
+> `bash /root/workspace/bin/warm-ok.sh` → disparar a **semente** com o goal que o script imprime
+> (os 6 critérios são o que faz o `jev-seed-gate` deixar passar) → esperar `WARMUP-OK` →
+> `bin/despachar.sh`. O guard **bloqueia** sem carimbo fresco (`G3d`, validade 20 min); `--warm-ok`
+> pula a checagem, nunca o warm. O script confere também que o `--dry-run` do warm-up aponta o
+> **mesmo** modelo do config — em 31/10 apontava um alias já retirado do catálogo (`400`).
+> Sem passo 0 não há onda: o custo do cold start é real e some do orçamento sem ninguém ver.
+
 1. Leia este arquivo inteiro antes de tocar em qualquer repo.
 2. Siga a seção do repo-alvo **à risca** (idioma, gates, posse e anti-duplicata variam por repo).
 3. **Passo 0 obrigatório antes de codar:** provar que o defeito ainda existe na base atual e que
